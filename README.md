@@ -20,7 +20,12 @@ Introduction goes here.
   bundle exec rails g spree_easypost:install
   ```
 
-4. Restart your server
+4. This goes into a new file called `config/initializers/easy_post.rb`:
+  ```ruby
+  EasyPost.api_key = 'YOUR_API_KEY_HERE'
+  ```
+
+5. Restart your server
 
   If your server was running, restart it so that it can find the assets properly.
 
@@ -47,4 +52,4 @@ If you'd like to contribute, please take a look at the
 [instructions](CONTRIBUTING.md) for installing dependencies and crafting a good
 pull request.
 
-Copyright (c) 2017 [name of extension creator], released under the New BSD License
+Copyright (c) 2017 Houtan Fanisalek, released under the New BSD License
