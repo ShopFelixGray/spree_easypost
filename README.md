@@ -1,7 +1,8 @@
-SpreeEasypost
-=====================
+# Spree + EasyPost
 
-Introduction goes here.
+This is an extension to integrate Easy Post into Spree. This extension is based off of a combination of [solidus_easypost](https://github.com/solidusio-contrib/solidus_easypost) and [solidus_shipping_labeler](https://github.com/solidusio-contrib/solidus_shipping_labeler)
+
+You will need to [sign up for an account](https://www.easypost.com/) to use this extension.
 
 ## Installation
 
@@ -18,6 +19,7 @@ Introduction goes here.
 3. Copy & run migrations
   ```ruby
   bundle exec rails g spree_easypost:install
+  rake db:migrate
   ```
 
 4. This goes into a new file called `config/initializers/easy_post.rb`:
