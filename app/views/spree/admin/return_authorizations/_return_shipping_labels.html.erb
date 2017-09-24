@@ -1,0 +1,24 @@
+<% if @return_authorization.return_labels.any? %>
+  <table class="table">
+    <thead data-hook="return_header">
+      <tr>
+        <th><%= Spree.t(:return_label_number) %></th>
+        <th><%= Spree.t(:return_label_tracking) %></th>
+        <th><%= Spree.t(:return_label_weight) %></th>
+        <th><%= "#{Spree.t('date')}/#{Spree.t('time')}" %></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+    <% @return_authorization.return_labels.each do |label| %>
+        <tr id="<%= spree_dom_id(label) %>" data-hook="return_row">
+          <td><%= label.easypost_shipment_id %></td>
+          <td><%= link_to "#{label.tracking}", admin_order_return_authorization_return_label_path(@order, @return_authorization, label) %></td>
+          <td><%= label.weight %></td>
+          <td><%= pretty_time(label.created_at) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+

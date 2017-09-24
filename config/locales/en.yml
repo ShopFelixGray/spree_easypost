@@ -1,0 +1,7 @@
+en:
+  spree:
+    generate_new_label: "Generate New Label"
+    return_label_number: "Easypost Shipment"
+    return_label_state: "State"
+    return_label_tracking: "Tracking"
+    return_label_weight: "Weight"
