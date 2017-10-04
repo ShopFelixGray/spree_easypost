@@ -37,24 +37,27 @@ module Spree
         from_address: stock_location.easypost_address,
         to_address: order.ship_address.easypost_address,
         parcel: build_parcel,
-        options: { print_custom_1: order.number, 
-                   print_custom_1_barcode: true,
-                   print_custom_2: return_authorization.number, 
-                   print_custom_2_barcode: true },
+        options: { print_custom_1: order.number + " // " + return_authorization.number, 
+                   print_custom_1_barcode: false,
+                   print_custom_2: build_sku_list, 
+                   print_custom_2_barcode: false},
         is_return: true
       )
     end
 
     def build_parcel
       # The parcel should be the sum of all the items
-      variants_for_ship = return_authorization.inventory_units.joins(:variant)
+      variants_for_return = return_authorization.inventory_units.joins(:variant)
 
       ::EasyPost::Parcel.create(
-        :weight => variants_for_ship.sum(:weight)
+        :weight => variants_for_return.sum(:weight)
       )
     end
 
-
+    def build_sku_list
+      variants_for_return = return_authorization.inventory_units
+      variants_for_return.map{|v| v.variant.sku }.join(", ")
+    end
 
     #@allv.map { |u| u.weight = 8; u.width = 8.0; u.depth = 3; u.height = 3; u.save! }
 
