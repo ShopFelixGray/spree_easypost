@@ -1,10 +1,10 @@
 <% if can? :update, shipment %>
     <% if shipment.tracking_label? %>
-        <%= link_to Spree.t(:print_label), shipment.tracking_label, class: 'ship-label pull-right btn btn-primary' %>
+        <%= link_to Spree.t(:print_label), shipment.tracking_label, class: 'ship-label pull-right btn btn-primary', style: 'margin-left: 15px;'%>
         <% if shipment.shipped? %>
             <div class='clearfix'></div>
         <% end %>
     <% elsif shipment.ready? %>
-        <%= link_to Spree.t(:buy_postage), 'javascript:;', class: 'ship-postage pull-right btn btn-primary', data: { 'shipment-number' => shipment.number } %>
+        <%= link_to Spree.t(:buy_postage), 'javascript:;', class: 'ship-postage pull-right btn btn-primary', data: { 'shipment-number' => shipment.number }, style: 'margin-left: 15px;' %>
     <% end %>
 <% end %>
