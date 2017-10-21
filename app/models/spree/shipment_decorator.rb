@@ -21,7 +21,7 @@ module Spree
         rate.id == selected_easy_post_rate_id
       end
 
-      easypost_shipment.buy(rate)
+      easypost_shipment.buy(rate) unless self.tracking?
       self.tracking = easypost_shipment.tracking_code
       self.tracking_label = easypost_shipment.postage_label.label_url
     end

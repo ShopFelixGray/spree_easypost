@@ -5,3 +5,5 @@ en:
     return_label_state: "State"
     return_label_tracking: "Tracking"
     return_label_weight: "Weight"
+    print_label: "Print Label"
+    buy_postage: "Buy Postage"
