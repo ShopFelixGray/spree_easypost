@@ -17,6 +17,12 @@ Spree::Core::Engine.add_routes do
           end
         end
       end
+
+      resources :shipments do
+        member do
+          put :buy_postage
+        end
+      end
     end
   end
 end
