@@ -1,9 +1,9 @@
 en:
   spree:
-    generate_new_label: "Generate New Label"
-    customer_shipment_number: "Shipment Number"
-    customer_shipment_state: "State"
-    customer_shipment_tracking: "Tracking"
-    customer_shipment_weight: "Weight"
+    tracking_label: "Tracking Label"
+    customer_shipments_number: "Shipment Number"
+    customer_shipments_state: "State"
+    customer_shipments_tracking: "Tracking"
+    customer_shipments_weight: "Weight"
     print_label: "Print Label"
     buy_postage: "Buy Postage"
