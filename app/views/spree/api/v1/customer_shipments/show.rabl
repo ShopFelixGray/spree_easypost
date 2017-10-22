@@ -1,0 +1,2 @@
+object @customer_shipment
+attributes *customer_shipment_attributes

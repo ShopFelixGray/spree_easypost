@@ -10,12 +10,8 @@ Spree::Core::Engine.add_routes do
 
   namespace :api do
     namespace :v1 do
-      resources :orders do
-        resources :return_authorizations do
-          resources :customer_shipments do
-            
-          end
-        end
+      resources :customer_shipments do
+        
       end
 
       resources :shipments do
