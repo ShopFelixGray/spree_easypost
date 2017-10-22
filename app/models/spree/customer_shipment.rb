@@ -62,8 +62,8 @@ module Spree
     end
 
     def build_sku_list
-      variants_for_return = return_authorization.inventory_units
-      variants_for_return.map{|v| v.variant.sku }.join(", ")
+      inventory_units = return_authorization.inventory_units
+      inventory_units.map{|v| v.variant.sku }.join(", ")
     end
 
     #@allv.map { |u| u.weight = 8; u.width = 8.0; u.depth = 3; u.height = 3; u.save! }
