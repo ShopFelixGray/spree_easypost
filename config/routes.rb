@@ -12,8 +12,8 @@ Spree::Core::Engine.add_routes do
     namespace :v1 do
       resources :orders do
         resources :return_authorizations do
-          member do
-            post :generate_return_label, to: 'shipping_labels#generate_return_label'
+          resources :customer_shipments do
+            
           end
         end
       end

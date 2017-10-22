@@ -1,21 +1,28 @@
 module Spree
-  class ReturnLabel < ActiveRecord::Base
-    after_create :generate_label!
+  class CustomerShipment < ActiveRecord::Base
+    include Spree::Core::NumberGenerator.new(prefix: 'CS', length: 11)
+
+    extend FriendlyId
+    friendly_id :number, slug_column: :number, use: :slugged
+
+    before_create :generate_label
 
     belongs_to :return_authorization
     
     has_one :order, through: :return_authorization
     has_one :stock_location, through: :return_authorization
 
+    self.whitelisted_ransackable_associations = %w[return_authorization]
+    self.whitelisted_ransackable_attributes = %w[number tracking]
+
     default_scope { order "created_at desc" }
 
-    def generate_label!
+    def generate_label
       easypost_shipment.buy(:rate => easypost_shipment.lowest_rate) unless easypost_shipment.postage_label
       self.easypost_shipment_id = easypost_shipment.id
       self.tracking = easypost_shipment.tracking_code
-      self.label_info = easypost_shipment.postage_label.label_url
+      self.tracking_label = easypost_shipment.postage_label.label_url
       self.weight = easypost_shipment.parcel.weight
-      save!
     end
 
     def refund_label
