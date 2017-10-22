@@ -1,18 +1,17 @@
 module Spree
-  class CustomerShipment < ActiveRecord::Base
+  class CustomerShipment < Spree::Base
     include Spree::Core::NumberGenerator.new(prefix: 'CS', length: 11)
 
     extend FriendlyId
     friendly_id :number, slug_column: :number, use: :slugged
 
     before_create :generate_label
+    before_destroy :refund_label
 
     belongs_to :return_authorization
     
     has_one :order, through: :return_authorization
     has_one :stock_location, through: :return_authorization
-
-    default_scope { order "created_at desc" }
 
     def generate_label
       easypost_shipment.buy(:rate => easypost_shipment.lowest_rate) unless easypost_shipment.postage_label
@@ -23,7 +22,12 @@ module Spree
     end
 
     def refund_label
-      easypost_shipment.refund
+      begin
+        easypost_shipment.refund
+        return true
+      rescue
+        return false
+      end
     end
 
     private
