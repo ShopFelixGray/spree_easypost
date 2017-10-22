@@ -28,6 +28,7 @@ module Spree
       begin
         easypost_shipment.refund
       rescue
+        puts 'could not refund label!'
       end
       return true
     end
