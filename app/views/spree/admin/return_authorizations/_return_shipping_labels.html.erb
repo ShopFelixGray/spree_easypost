@@ -10,12 +10,12 @@
       </tr>
     </thead>
     <tbody>
-    <% @return_authorization.customer_shipments.each do |shipment| %>
-        <tr id="<%= spree_dom_id(label) %>" data-hook="return_row">
-          <td><%= shipment.number %></td>
-          <td><%= link_to "#{shipment.tracking}", @label.tracking_label %></td>
-          <td><%= shipment.weight %></td>
-          <td><%= pretty_time(shipment.created_at) %></td>
+    <% @return_authorization.customer_shipments.each do |customer_shipment| %>
+        <tr id="<%= spree_dom_id(customer_shipment) %>" data-hook="return_row">
+          <td><%= customer_shipment.number %></td>
+          <td><%= link_to "#{customer_shipment.tracking}", customer_shipment.tracking_label %></td>
+          <td><%= customer_shipment.weight %></td>
+          <td><%= pretty_time(customer_shipment.created_at) %></td>
         </tr>
       <% end %>
     </tbody>

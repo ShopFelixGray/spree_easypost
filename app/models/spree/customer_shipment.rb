@@ -12,9 +12,6 @@ module Spree
     has_one :order, through: :return_authorization
     has_one :stock_location, through: :return_authorization
 
-    self.whitelisted_ransackable_associations = %w[return_authorization]
-    self.whitelisted_ransackable_attributes = %w[number tracking]
-
     default_scope { order "created_at desc" }
 
     def generate_label
