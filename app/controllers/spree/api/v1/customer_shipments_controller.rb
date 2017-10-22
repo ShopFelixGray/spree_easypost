@@ -12,13 +12,14 @@ module Spree
 
       def index
         authorize! :index, CustomerShipment
-        @orders = Order.ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
-        respond_with(@orders)
+        @CustomerShipments = CustomerShipment.ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
+        respond_with(@CustomerShipments)
       end
 
       private
         def find_order
-          @order = Spree::Order.where(number: params[:order_id]).first
+          @order = Spree::Order.find_by!(number: params.fetch(:customer_shipment).fetch(:order_id))
+          authorize! :read, @order
         end
     end
   end

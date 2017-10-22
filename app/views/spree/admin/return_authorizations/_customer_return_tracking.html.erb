@@ -1,0 +1,5 @@
+<% if return_authorization.customer_shipments.any? %>
+    <% return_authorization.customer_shipments.each do |customer_shipment| %>
+        <%= link_to_with_icon 'envelope', Spree.t('tracking_label'), customer_shipment.tracking_label, class: 'tracking-item btn btn-primary btn-sm', title: Spree.t('tracking_label'), no_text: true %>
+    <% end %>
+<% end %>
