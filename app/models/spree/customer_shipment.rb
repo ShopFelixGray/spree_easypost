@@ -13,6 +13,9 @@ module Spree
     has_one :order, through: :return_authorization
     has_one :stock_location, through: :return_authorization
 
+    self.whitelisted_ransackable_associations = %w[return_authorization]
+    self.whitelisted_ransackable_attributes = %w[number tracking]
+
     def generate_label
       easypost_shipment.buy(:rate => easypost_shipment.lowest_rate) unless easypost_shipment.postage_label
       self.easypost_shipment_id = easypost_shipment.id
@@ -24,10 +27,9 @@ module Spree
     def refund_label
       begin
         easypost_shipment.refund
-        return true
       rescue
-        return false
       end
+      return true
     end
 
     private
