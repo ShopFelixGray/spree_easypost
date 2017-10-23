@@ -1,7 +1,7 @@
 module Spree
-    module PermittedAttributes
+   module PermittedAttributes
 
-        ATTRIBUTES.push(:customer_shipment_attributes)
+        mattr_reader :customer_shipment_attributes
         
         @@customer_shipment_attributes = [:tracking, :tracking_label, :weight]
         
