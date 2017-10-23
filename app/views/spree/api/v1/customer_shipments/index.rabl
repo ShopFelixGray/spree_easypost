@@ -1,6 +1,6 @@
 object false
 child(@customer_shipments => :customer_shipments) do
-  attributes *customer_shipment_attributes
+    extends "spree/api/v1/customer_shipments/show"
 end
 node(:count) { @customer_shipments.count }
 node(:current_page) { params[:page].try(:to_i) || 1 }
