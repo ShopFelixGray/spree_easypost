@@ -7,7 +7,7 @@ class AddCustomerShipments < ActiveRecord::Migration
       t.string      :easypost_shipment_id  
       t.string      :tracking   
       t.text        :tracking_label
-      t.timestamps  :null => false
+      t.timestamps  :null false
     end
 
     add_index :spree_customer_shipments, :return_authorization_id
