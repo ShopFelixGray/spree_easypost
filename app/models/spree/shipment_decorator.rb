@@ -8,6 +8,14 @@ module Spree
       )
     end
 
+    def determine_state(order)
+      return 'canceled' if order.canceled?
+      return 'pending' unless order.can_ship?
+      return 'pending' if inventory_units.any? &:backordered?
+      return 'shipped' if shipped?
+      order.paid? || Spree::Config[:auto_capture_on_postage_buy] ? 'ready' : 'pending'
+    end
+
     def easypost_shipment
       if selected_easy_post_shipment_id
         @ep_shipment ||= ::EasyPost::Shipment.retrieve(selected_easy_post_shipment_id)
@@ -16,7 +24,10 @@ module Spree
       end
     end
 
+
     def buy_easypost_rate
+      process_order_payments if Spree::Config[:auto_capture_on_postage_buy]
+
       rate = easypost_shipment.rates.find do |rate|
         rate.id == selected_easy_post_rate_id
       end
