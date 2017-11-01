@@ -37,6 +37,15 @@ module Spree
       self.tracking_label = easypost_shipment.postage_label.label_url
     end
 
+    def build_custom_1
+      order.number
+    end
+
+    def build_custom_2
+      inventory_units = order.inventory_units
+      inventory_units.map{|v| v.variant.sku }.join(", ")
+    end
+
     private
 
     def selected_easy_post_rate_id
@@ -52,16 +61,11 @@ module Spree
         to_address: order.ship_address.easypost_address,
         from_address: stock_location.easypost_address,
         parcel: to_package.easypost_parcel,
-        options: { print_custom_1: order.number, 
+        options: { print_custom_1: build_custom_1, 
         print_custom_1_barcode: false,
-        print_custom_2: build_sku_list, 
+        print_custom_2: build_custom_2,
         print_custom_2_barcode: false},
       )
-    end
-
-    def build_sku_list
-      inventory_units = order.inventory_units
-      inventory_units.map{|v| v.variant.sku }.join(", ")
     end
 
   end
