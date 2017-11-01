@@ -11,5 +11,14 @@ module Spree
           update_attributes(amount: captured_amount)
         end
       end
+
+      def repurchase
+        @new_payment = order.payments.create! amount: amount,
+                                              payment_method: payment_method,
+                                              source: source,
+                                              state: 'pending'
+        @new_payment.purchase!
+      end
+
     end
 end
