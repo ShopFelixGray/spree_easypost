@@ -12,18 +12,27 @@ module Spree
                 respond_with(@shipment, default_template: :show)   
             end
 
-            def generate_scan_form
-                easy_post_shipments = []
+            def scan_form
+                @easy_post_shipments = []
+                @easy_post_failed_shipments = []
                 params[:shipments].each do |shipment_id|
-                    shipment = Spree::Shipment.readonly(true).friendly.find(shipment_id)
-                    easy_post_shipment = shipment.easypost_shipment
-                    easy_post_shipments.push(easy_post_shipment)
+                    begin
+                        shipment = Spree::Shipment.accessible_by(current_ability, :read).readonly(true).friendly.find(shipment_id)
+                        easy_post_shipment = shipment.easypost_shipment
+                        @easy_post_shipments.push(easy_post_shipment)
+                    rescue
+                        @easy_post_failed_shipments.push(shipment_id)
+                    end
+                end
+                
+                begin
+                    @scan_form = ::EasyPost::ScanForm.create(shipments: @easy_post_shipments)
+                    render json: { scan_form: @scan_form.form_url, failed_shipments: @easy_post_failed_shipments}
+                rescue ::EasyPost::Error => e
+                    render json: e.json_body, :status => :bad_request
                 end
 
-                scan_form = ::EasyPost::ScanForm.create(shipments: easy_post_shipments)
-                redirect_to scan_form.form_url
             end
-
         end
       end
     end

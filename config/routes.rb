@@ -20,7 +20,7 @@ Spree::Core::Engine.add_routes do
         end
       end
 
-      post "/scan_form" => "shipments#generate_scan_form"
+      post "/scan_form" => "shipments#scan_form"
     end
   end
 end
