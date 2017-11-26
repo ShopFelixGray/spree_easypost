@@ -47,8 +47,8 @@ module Spree
     end
 
     def easypost_shipment
-      if self.selected_easy_post_shipment_id
-        @ep_shipment ||= ::EasyPost::Shipment.retrieve(self.selected_easy_post_shipment_id)
+      if selected_easy_post_shipment_id
+        @ep_shipment ||= ::EasyPost::Shipment.retrieve(selected_easy_post_shipment_id)
       else
         @ep_shipment = build_easypost_shipment
       end
@@ -79,11 +79,11 @@ module Spree
     private
 
     def selected_easy_post_rate_id
-      selected_shipping_rate.easy_post_rate_id
+      self.selected_shipping_rate.easy_post_rate_id
     end
 
     def selected_easy_post_shipment_id
-      selected_shipping_rate.easy_post_shipment_id
+      self.selected_shipping_rate.easy_post_shipment_id
     end
 
     def get_formatted_time
