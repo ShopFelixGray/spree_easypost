@@ -86,15 +86,21 @@ module Spree
       selected_shipping_rate.easy_post_shipment_id
     end
 
+    def get_formatted_time
+      iso_time = Time.now
+      iso_time.iso8601
+    end
+
     def build_easypost_shipment
       ::EasyPost::Shipment.create(
         to_address: order.ship_address.easypost_address,
         from_address: stock_location.easypost_address,
         parcel: to_package.easypost_parcel,
-        options: { print_custom_1: build_custom_1, 
+        options: { label_date: get_formatted_time,
+        print_custom_1: build_custom_1, 
         print_custom_1_barcode: false,
         print_custom_2: build_custom_2,
-        print_custom_2_barcode: false},
+        print_custom_2_barcode: false },
       )
     end
 
