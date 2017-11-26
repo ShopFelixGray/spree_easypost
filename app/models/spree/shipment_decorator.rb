@@ -79,11 +79,16 @@ module Spree
     private
 
     def selected_easy_post_rate_id
-      selected_shipping_rate.easy_post_rate_id
+      self.selected_shipping_rate.easy_post_rate_id
     end
 
     def selected_easy_post_shipment_id
-      selected_shipping_rate.easy_post_shipment_id
+      self.selected_shipping_rate.easy_post_shipment_id
+    end
+
+    def get_formatted_time
+      iso_time = Time.now
+      iso_time.iso8601
     end
 
     def build_easypost_shipment
@@ -91,10 +96,11 @@ module Spree
         to_address: order.ship_address.easypost_address,
         from_address: stock_location.easypost_address,
         parcel: to_package.easypost_parcel,
-        options: { print_custom_1: build_custom_1, 
+        options: { label_date: get_formatted_time,
+        print_custom_1: build_custom_1, 
         print_custom_1_barcode: false,
         print_custom_2: build_custom_2,
-        print_custom_2_barcode: false},
+        print_custom_2_barcode: false },
       )
     end
 
