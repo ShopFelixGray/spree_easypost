@@ -47,8 +47,8 @@ module Spree
     end
 
     def easypost_shipment
-      if selected_easy_post_shipment_id
-        @ep_shipment ||= ::EasyPost::Shipment.retrieve(selected_easy_post_shipment_id)
+      if self.selected_easy_post_shipment_id
+        @ep_shipment ||= ::EasyPost::Shipment.retrieve(self.selected_easy_post_shipment_id)
       else
         @ep_shipment = build_easypost_shipment
       end
