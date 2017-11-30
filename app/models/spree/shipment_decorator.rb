@@ -56,9 +56,13 @@ module Spree
 
 
     def buy_easypost_rate
-      # We need to get rates if something wasnt selected during checkout
       easypost_rate_id = selected_easy_post_rate_id
-      refresh_rates(ShippingMethod::DISPLAY_ON_FRONT_AND_BACK_END) if easypost_rate_id.nil?
+
+      # We need to get rates if it wasnt selected during checkout
+      if easypost_rate_id.nil?
+        refresh_rates(ShippingMethod::DISPLAY_ON_FRONT_AND_BACK_END)
+        self.reload
+      end
 
       # Process payments if auto capture was off
       process_order_payments if Spree::Config[:auto_capture_on_postage_buy]
