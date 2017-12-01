@@ -12,6 +12,18 @@ module Spree
                 respond_with(@shipment, default_template: :show)   
             end
 
+            def buy_postage_ship
+                find_and_update_shipment
+                unless @shipment.tracking_label?
+                    @shipment.buy_easypost_rate
+                    @shipment.save!
+                    unless @shipment.shipped?
+                        @shipment.ship!
+                    end
+                end
+                respond_with(@shipment, default_template: :show) 
+            end
+
             def scan_form
                 @easy_post_shipments = []
                 @easy_post_failed_shipments = []

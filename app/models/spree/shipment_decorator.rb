@@ -56,12 +56,24 @@ module Spree
 
 
     def buy_easypost_rate
-      process_order_payments if Spree::Config[:auto_capture_on_postage_buy]
+      easypost_rate_id = selected_easy_post_rate_id
 
-      rate = easypost_shipment.rates.find do |rate|
-        rate.id == selected_easy_post_rate_id
+      # We need to get rates if it wasnt selected during checkout
+      if easypost_rate_id.nil?
+        refresh_rates(ShippingMethod::DISPLAY_ON_FRONT_AND_BACK_END)
+        self.reload
+        easypost_rate_id = selected_easy_post_rate_id
       end
 
+      # Process payments if auto capture was off
+      process_order_payments if Spree::Config[:auto_capture_on_postage_buy]
+
+      # Get the selected rate
+      rate = easypost_shipment.rates.find do |rate|
+        rate.id == easypost_rate_id
+      end
+
+      # Purchase the postage unless it was purchased before
       easypost_shipment.buy(rate) unless self.tracking?
       self.tracking = easypost_shipment.tracking_code
       self.tracking_label = easypost_shipment.postage_label.label_url
