@@ -62,6 +62,7 @@ module Spree
       if easypost_rate_id.nil?
         refresh_rates(ShippingMethod::DISPLAY_ON_FRONT_AND_BACK_END)
         self.reload
+        easypost_rate_id = selected_easy_post_rate_id
       end
 
       # Process payments if auto capture was off
