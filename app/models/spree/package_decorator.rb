@@ -9,6 +9,10 @@ module Spree
         ::EasyPost::Parcel.create weight: total_weight
       end
 
+      def use_easypost?
+        shipping_categories.any? { |shipping_category| shipping_category.use_easypost }
+      end
+
       def build_sku_list
         inventory_units = order.inventory_units
         inventory_units.map{|v| v.variant.sku }.join(", ")

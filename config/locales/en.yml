@@ -7,3 +7,4 @@ en:
     customer_shipments_weight: "Weight"
     print_label: "Print Label"
     buy_postage: "Buy Postage"
+    use_easypost: "Use Easypost"
