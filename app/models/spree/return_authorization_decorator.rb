@@ -4,7 +4,7 @@ Spree::ReturnAuthorization.class_eval do
   attr_accessor :create_label
   attr_accessor :custom_weight
 
-  after_save :buy_postage, only: [:create]
+  after_create :buy_postage, if: :create_label
 
   state_machine.before_transition(
     to: :canceled,
@@ -12,8 +12,11 @@ Spree::ReturnAuthorization.class_eval do
   )
         
   def buy_postage
-    return unless create_label == 'true'
     customer_shipments.create!
+  end
+
+  def create_label
+    @create_label == '1'
   end
 
   def custom_weight
