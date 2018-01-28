@@ -12,7 +12,7 @@ Spree::ReturnAuthorization.class_eval do
   )
         
   def buy_postage
-    return unless create_label
+    return unless create_label == 'true'
     customer_shipments.create!
   end
 
