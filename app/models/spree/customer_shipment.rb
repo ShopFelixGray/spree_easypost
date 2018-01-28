@@ -67,10 +67,8 @@ module Spree
 
     def build_sku_list
       inventory_units = return_authorization.inventory_units
-      inventory_units.map{|v| v.variant.sku }.join(", ")
+      inventory_units.map{|v| v.variant.sku }.join("|")[0..35] # Most carriers have a 35 char limit
     end
-
-    #@allv.map { |u| u.weight = 8; u.width = 8.0; u.depth = 3; u.height = 3; u.save! }
 
   end
 end

@@ -1,0 +1,7 @@
+<!-- insert_bottom '[data-hook="buttons"]' -->
+<div data-hook="admin_return_authorizations_easypost">
+    <%= f.field_container :create_label, class: ['form-group'] do %>
+        <%= f.label :create_label, Spree.t(:create_label) %>
+        <%= f.check_box :create_label, checked: true, class: 'form-control' %>
+    <% end %>
+</div>
