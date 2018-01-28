@@ -58,19 +58,23 @@ module Spree
 
     def build_parcel
       # The parcel should be the sum of all the items
-      variants_for_return = return_authorization.inventory_units.joins(:variant)
+      parcel_weight = 0
+
+      if !return_authorization.custom_weight.nil? && return_authorization.custom_weight > 0
+        parcel_weight = return_authorization.custom_weight 
+      else
+        parcel_weight = return_authorization.inventory_units.joins(:variant).sum(:weight)
+      end
 
       ::EasyPost::Parcel.create(
-        :weight => variants_for_return.sum(:weight)
+        :weight => parcel_weight
       )
     end
 
     def build_sku_list
       inventory_units = return_authorization.inventory_units
-      inventory_units.map{|v| v.variant.sku }.join(", ")
+      inventory_units.map{|v| v.variant.sku }.join("|")[0..35] # Most carriers have a 35 char limit
     end
-
-    #@allv.map { |u| u.weight = 8; u.width = 8.0; u.depth = 3; u.height = 3; u.save! }
 
   end
 end
