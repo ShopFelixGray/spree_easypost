@@ -3,7 +3,7 @@ Spree::ReturnAuthorization.class_eval do
 
   attr_accessor :create_label
 
-  after_save :buy_postage, only: [:create], if: :should_create_label
+  after_save :buy_postage, only: [:create]
 
   state_machine.before_transition(
     to: :canceled,
@@ -11,13 +11,9 @@ Spree::ReturnAuthorization.class_eval do
   )
         
   def buy_postage
+    return unless create_label
     customer_shipments.create!
   end
-
-  def should_create_label
-    create_label == true
-  end
- 
 
   def customer_shipments_refund_labels
     if customer_shipments.any?
