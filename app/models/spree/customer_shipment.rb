@@ -58,10 +58,16 @@ module Spree
 
     def build_parcel
       # The parcel should be the sum of all the items
-      variants_for_return = return_authorization.inventory_units.joins(:variant)
+      parcel_weight = 0
+
+      if !return_authorization.custom_weight.nil? && return_authorization.custom_weight > 0
+        parcel_weight = return_authorization.custom_weight 
+      else
+        parcel_weight = return_authorization.inventory_units.joins(:variant).sum(:weight)
+      end
 
       ::EasyPost::Parcel.create(
-        :weight => variants_for_return.sum(:weight)
+        :weight => parcel_weight
       )
     end
 

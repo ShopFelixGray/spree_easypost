@@ -2,6 +2,7 @@ Spree::ReturnAuthorization.class_eval do
   has_many :customer_shipments, class_name: "Spree::CustomerShipment", :dependent => :destroy
 
   attr_accessor :create_label
+  attr_accessor :custom_weight
 
   after_save :buy_postage, only: [:create]
 
@@ -13,6 +14,10 @@ Spree::ReturnAuthorization.class_eval do
   def buy_postage
     return unless create_label
     customer_shipments.create!
+  end
+
+  def custom_weight
+    @custom_weight.to_f
   end
 
   def customer_shipments_refund_labels
