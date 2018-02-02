@@ -15,7 +15,7 @@ module Spree
 
       def build_sku_list
         inventory_units = order.inventory_units
-        inventory_units.map{|v| v.variant.sku }.join(", ")
+        inventory_units.map{|v| v.variant.sku }.join("|")[0..35] # Most carriers have a 35 char limit
       end
 
       def easypost_shipment
