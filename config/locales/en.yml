@@ -8,3 +8,4 @@ en:
     print_label: "Print Label"
     buy_postage: "Buy Postage"
     use_easypost: "Use Easypost"
+    shipping_easypost_rate_per_order: "Easypost Rate"
