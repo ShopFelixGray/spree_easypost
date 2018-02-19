@@ -4,15 +4,19 @@ module Spree
         ShipmentsController.class_eval do
             
             def buy_postage
-                find_and_update_shipment
-                unless @shipment.tracking_label?
-                    @shipment.buy_easypost_rate
-                    @shipment.save!
-                    unless @shipment.shipped?
-                        @shipment.ship!
+                begin
+                    find_and_update_shipment
+                    unless @shipment.tracking_label?
+                        @shipment.buy_easypost_rate
+                        @shipment.save!
+                        unless @shipment.shipped?
+                            @shipment.ship!
+                        end
                     end
+                    respond_with(@shipment, default_template: :show)
+                rescue
+                    render :nothing => true, :status => :bad_request
                 end
-                respond_with(@shipment, default_template: :show) 
             end
 
             def scan_form

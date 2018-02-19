@@ -54,7 +54,7 @@ module Spree
           r.name = method_name
           r.display_on = 'back_end'
           r.code = rate.service
-          r.calculator = Spree::Calculator::Shipping::EasypostRate.create
+          r.calculator = Spree::Calculator::Shipping::FlatRate.create
           r.shipping_categories = [Spree::ShippingCategory.first]
         end
       end

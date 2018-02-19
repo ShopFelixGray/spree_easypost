@@ -56,6 +56,8 @@ module Spree
 
 
     def buy_easypost_rate
+      raise "can only buy postage when order is ready" unless self.state == 'ready'
+
       easypost_rate_id = selected_easy_post_rate_id
 
       # We need to get rates if it wasnt selected during checkout
