@@ -19,6 +19,27 @@ module Spree
                 end
             end
 
+            def scan_form_today
+                @shipments = Shipment.where({state: "shipped", shipped_at: Time.now.midnight..(Time.now.midnight + 1.day), stock_location_id: params[:stock_location_id]})
+                @easy_post_shipments = []
+                @easy_post_failed_shipments = []
+                @shipments.each do |shipment|
+                    begin
+                        easy_post_shipment = shipment.easypost_shipment
+                        @easy_post_shipments.push(easy_post_shipment)
+                    rescue
+                        @easy_post_failed_shipments.push(shipment_id)
+                    end
+                end
+                    
+                begin
+                    @scan_form = ::EasyPost::ScanForm.create(shipments: @easy_post_shipments)
+                    render json: { scan_form: @scan_form.form_url, failed_shipments: @easy_post_failed_shipments}
+                rescue ::EasyPost::Error => e
+                    render json: e.json_body, :status => :bad_request                    
+                end
+            end
+
             def scan_form
                 @easy_post_shipments = []
                 @easy_post_failed_shipments = []
