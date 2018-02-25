@@ -1,12 +1,12 @@
-module Spree
-  module ShipmentDecorator
-    def self.prepended(mod)
-      mod.state_machine.before_transition(
-        to: :shipped,
-        do: :buy_easypost_rate,
-        if: -> { Spree::Config[:buy_postage] }
-      )
-    end
+Spree::Shipment.class_eval do
+
+    belongs_to :scan_form, :inverse_of => :Shipment
+
+    self.state_machine.before_transition(
+      to: :shipped,
+      do: :buy_easypost_rate,
+      if: -> { Spree::Config[:buy_postage] }
+    )
 
     def determine_state(order)
       return 'canceled' if order.canceled?
@@ -117,8 +117,4 @@ module Spree
         print_custom_2_barcode: false },
       )
     end
-
-  end
 end
-
-Spree::Shipment.prepend Spree::ShipmentDecorator

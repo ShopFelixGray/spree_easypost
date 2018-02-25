@@ -19,48 +19,31 @@ module Spree
                 end
             end
 
-            def scan_form_today
-                @shipments = Shipment.where({state: "shipped", shipped_at: Time.now.midnight..(Time.now.midnight + 1.day), stock_location_id: params[:stock_location_id]})
+            def scan_form
+                stock_location = params[:stock_location_id]
+                @shipments = Shipment.where({state: "shipped", 
+                        shipped_at: Time.now.midnight..(Time.now.midnight + 1.day), 
+                        stock_location_id: stock_location, 
+                        scan_form_id: nil})
                 @easy_post_shipments = []
-                @easy_post_failed_shipments = []
                 @shipments.each do |shipment|
-                    begin
-                        easy_post_shipment = shipment.easypost_shipment
-                        @easy_post_shipments.push(easy_post_shipment)
-                    rescue
-                        @easy_post_failed_shipments.push(shipment_id)
-                    end
+                    easy_post_shipment = shipment.easypost_shipment
+                    @easy_post_shipments.push(easy_post_shipment)
                 end
                     
                 begin
                     @scan_form = ::EasyPost::ScanForm.create(shipments: @easy_post_shipments)
-                    render json: { scan_form: @scan_form.form_url, failed_shipments: @easy_post_failed_shipments}
+                    spree_scan_form = Spree::ScanForm.create(
+                        easy_post_scan_form_id: @scan_form.id,
+                        stock_location_id: stock_location,
+                        scan_form: @scan_form.form_url)
+                    @shipments.update_all(:scan_form_id => spree_scan_form.id)
+                    render json: { scan_form: @scan_form.form_url }
                 rescue ::EasyPost::Error => e
                     render json: e.json_body, :status => :bad_request                    
                 end
             end
 
-            def scan_form
-                @easy_post_shipments = []
-                @easy_post_failed_shipments = []
-                params[:shipments].each do |shipment_id|
-                    begin
-                        shipment = Spree::Shipment.accessible_by(current_ability, :read).readonly(true).friendly.find(shipment_id)
-                        easy_post_shipment = shipment.easypost_shipment
-                        @easy_post_shipments.push(easy_post_shipment)
-                    rescue
-                        @easy_post_failed_shipments.push(shipment_id)
-                    end
-                end
-                
-                begin
-                    @scan_form = ::EasyPost::ScanForm.create(shipments: @easy_post_shipments)
-                    render json: { scan_form: @scan_form.form_url, failed_shipments: @easy_post_failed_shipments}
-                rescue ::EasyPost::Error => e
-                    render json: e.json_body, :status => :bad_request
-                end
-
-            end
         end
       end
     end

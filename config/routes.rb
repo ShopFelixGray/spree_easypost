@@ -17,12 +17,11 @@ Spree::Core::Engine.add_routes do
       resources :shipments do
         member do
           put :buy_postage
-          put :buy_postage_ship
         end
       end
 
       post "/scan_form" => "shipments#scan_form"
-      post "/scan_form_today" => "shipments#scan_form_today"
+
     end
   end
 end
