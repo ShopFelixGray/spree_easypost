@@ -1,0 +1,6 @@
+<% content_for :page_actions do %>
+  <button id="scanForm" class="btn btn-primary" icon="upload" type="button" data-toggle="modal" data-target="#formModal">
+    <span class="icon icon-upload"></span>
+    <%= Spree.t(:scan_form) %>
+  </button>
+<% end if can? :create, Spree::Order %>
