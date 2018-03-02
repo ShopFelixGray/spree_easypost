@@ -3,6 +3,7 @@
   'use strict'; 
   // handle buy scan form create click
   $('#submitScanForm').on('click', function () {
+    var newWindow = window.open("", "_blank");
     var stock_location_id = $('#stockLocation').val();
     var url = Spree.url(Spree.routes.scan_form);
     $.ajax({
@@ -13,7 +14,7 @@
         stock_location_id: stock_location_id
       }
     }).done(function (data) {
-      window.open(data.responseJSON.scan_form);
+      newWindow.location.href = data.scan_form;
     }).error(function (err) {
       window.alert(err.responseJSON.error.message);
     });
