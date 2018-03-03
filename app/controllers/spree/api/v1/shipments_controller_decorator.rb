@@ -20,10 +20,11 @@ module Spree
             end
 
             def scan_form
-                stock_location = params[:stock_location_id]
+                stock_location = StockLocation.find_by(:id => params[:stock_location_id])
+                time_in_zone = Time.now.in_time_zone(stock_location.time_zone)
                 @shipments = Shipment.where({state: "shipped", 
-                        shipped_at: Time.now.midnight..(Time.now.midnight + 1.day), 
-                        stock_location_id: stock_location, 
+                        shipped_at: time_in_zone.beginning_of_day..(time_in_zone.end_of_day), 
+                        stock_location: stock_location, 
                         scan_form_id: nil})
                 @easy_post_shipments = []
                 @shipments.each do |shipment|
@@ -35,7 +36,7 @@ module Spree
                     @scan_form = ::EasyPost::ScanForm.create(shipments: @easy_post_shipments)
                     spree_scan_form = Spree::ScanForm.create(
                         easy_post_scan_form_id: @scan_form.id,
-                        stock_location_id: stock_location,
+                        stock_location: stock_location,
                         scan_form: @scan_form.form_url)
                     @shipments.update_all(:scan_form_id => spree_scan_form.id)
                     render json: { scan_form: @scan_form.form_url }
