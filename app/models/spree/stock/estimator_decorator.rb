@@ -17,7 +17,6 @@ module Spree
               calculator = shipping_method.calculator
               # Create the easypost rate
               spree_rate = Spree::ShippingRate.new(
-                name: "#{ rate.carrier } #{ rate.service }",
                 cost: calculator == Spree::Calculator::Shipping::EasypostRate ? rate.rate : calculator.compute(package),
                 easy_post_shipment_id: rate.shipment_id,
                 easy_post_rate_id: rate.id,
