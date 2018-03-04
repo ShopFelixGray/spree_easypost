@@ -34,6 +34,7 @@ module Spree
                         scan_form_id: nil,
                         spree_shipping_rates: { selected: true }})
                         .where("spree_shipping_methods.name LIKE ?", selected_carrier + "%")
+                        .where.not(tracking_label: nil)
                         .distinct
                 @easy_post_shipments = []
                 @shipments.each do |shipment|
