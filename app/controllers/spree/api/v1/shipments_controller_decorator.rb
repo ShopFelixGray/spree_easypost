@@ -25,7 +25,7 @@ module Spree
                 stock_location = StockLocation.find_by(:id => params[:stock_location_id])
                 time_in_zone = Time.now.in_time_zone(stock_location.time_zone)
                 selected_carrier = "USPS" # only USPS does scan forms currently
-                @shipments = Shipment.joins(:shipping_rates, :shipping_methods)
+                @shipments = Shipment.joins(:shipping_rates => :shipping_method)
                         .where({state: "shipped", 
                         shipped_at: time_in_zone.beginning_of_day..(time_in_zone.end_of_day), 
                         stock_location: stock_location, 
