@@ -15,6 +15,7 @@
       }
     }).done(function (data) {
       newWindow.location.href = data.scan_form;
+      $('#formModal').modal('hide');
     }).error(function (err) {
       window.alert(err.responseJSON.error.message);
     });
