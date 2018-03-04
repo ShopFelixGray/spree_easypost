@@ -19,13 +19,20 @@ module Spree
                 end
             end
 
+            
+
             def scan_form
                 stock_location = StockLocation.find_by(:id => params[:stock_location_id])
                 time_in_zone = Time.now.in_time_zone(stock_location.time_zone)
-                @shipments = Shipment.where({state: "shipped", 
+                selected_carrier = "USPS" # only USPS does scan forms currently
+                @shipments = Shipment.joins(:shipping_rates, :shipping_methods)
+                        .where({state: "shipped", 
                         shipped_at: time_in_zone.beginning_of_day..(time_in_zone.end_of_day), 
                         stock_location: stock_location, 
-                        scan_form_id: nil})
+                        scan_form_id: nil,
+                        spree_shipping_rates: { selected: true }})
+                        .where("spree_shipping_methods.name LIKE ?", selected_carrier + "%")
+                        .distinct
                 @easy_post_shipments = []
                 @shipments.each do |shipment|
                     easy_post_shipment = shipment.easypost_shipment
