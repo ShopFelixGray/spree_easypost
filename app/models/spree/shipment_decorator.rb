@@ -1,6 +1,6 @@
 Spree::Shipment.class_eval do
 
-    belongs_to :scan_form, :inverse_of => :Shipment
+    belongs_to :scan_form, class_name: 'Spree::ScanForm'
 
     self.state_machine.before_transition(
       to: :shipped,
