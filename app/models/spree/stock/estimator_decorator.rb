@@ -11,15 +11,19 @@ module Spree
     
           if rates.any?
             rates.each do |rate|
+              # See if we can find the shipping method otherwise create it
+              shipping_method = find_or_create_shipping_method(rate)
+              # Get the calculator to see if we want to use easypost rate
+              calculator = shipping_method.calculator
+              # Create the easypost rate
               spree_rate = Spree::ShippingRate.new(
-                name: "#{ rate.carrier } #{ rate.service }",
-                cost: Spree::Config[:calculate_price] ? rate.rate : 0.0,
+                cost: calculator == Spree::Calculator::Shipping::EasypostRate ? rate.rate : calculator.compute(package),
                 easy_post_shipment_id: rate.shipment_id,
                 easy_post_rate_id: rate.id,
-                shipping_method: find_or_create_shipping_method(rate)
+                shipping_method: shipping_method
               )
-    
-              shipping_rates << spree_rate if spree_rate.shipping_method.frontend?
+              # Save the rates that we want to show the customer
+              shipping_rates << spree_rate if shipping_method.available_to_display(shipping_method_filter)
             end
     
             # Sets cheapest rate to be selected by default

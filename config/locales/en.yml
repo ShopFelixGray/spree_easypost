@@ -8,3 +8,6 @@ en:
     print_label: "Print Label"
     buy_postage: "Buy Postage"
     use_easypost: "Use Easypost"
+    shipping_easypost_rate_per_order: "Easypost Rate"
+    scan_form: "Scan Form"
+    scan_form_stock_location: "Select a stock location to print a scan form for:"

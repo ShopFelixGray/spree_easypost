@@ -1,12 +1,12 @@
-module Spree
-  module ShipmentDecorator
-    def self.prepended(mod)
-      mod.state_machine.before_transition(
-        to: :shipped,
-        do: :buy_easypost_rate,
-        if: -> { Spree::Config[:buy_postage] }
-      )
-    end
+Spree::Shipment.class_eval do
+
+    belongs_to :scan_form, class_name: 'Spree::ScanForm'
+
+    self.state_machine.before_transition(
+      to: :shipped,
+      do: :buy_easypost_rate,
+      if: -> { Spree::Config[:buy_postage] }
+    )
 
     def determine_state(order)
       return 'canceled' if order.canceled?
@@ -56,6 +56,8 @@ module Spree
 
 
     def buy_easypost_rate
+      raise "can only buy postage when order is ready" unless (self.state == 'ready' || self.state == 'shipped')
+
       easypost_rate_id = selected_easy_post_rate_id
 
       # We need to get rates if it wasnt selected during checkout
@@ -85,7 +87,7 @@ module Spree
 
     def build_custom_2
       inventory_units = order.inventory_units
-      inventory_units.map{|v| v.variant.sku }.join(", ")
+      inventory_units.map{|v| v.variant.sku }.join("|")[0..35]
     end
 
     private
@@ -115,8 +117,4 @@ module Spree
         print_custom_2_barcode: false },
       )
     end
-
-  end
 end
-
-Spree::Shipment.prepend Spree::ShipmentDecorator
