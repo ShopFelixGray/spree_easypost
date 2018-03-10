@@ -20,7 +20,7 @@ module Spree
       easypost_shipment.buy(:rate => easypost_shipment.lowest_rate) unless easypost_shipment.postage_label
       self.easypost_shipment_id = easypost_shipment.id
       self.tracking = easypost_shipment.tracking_code
-      self.tracking_label = easypost_shipment.postage_label.label_url
+      self.tracking_label = get_label_pdf
       self.weight = easypost_shipment.parcel.weight
     end
 
@@ -33,11 +33,16 @@ module Spree
       return true
     end
 
+    def get_label_pdf
+      easypost_shipment.label(file_format: "PDF")
+      easypost_shipment.postage_label.label_pdf_url
+    end
+
     private
 
     def easypost_shipment
-      if easypost_shipment_id
-        @ep_shipment ||= ::EasyPost::Shipment.retrieve(easypost_shipment_id)
+      if self.easypost_shipment_id
+        @ep_shipment ||= ::EasyPost::Shipment.retrieve(self.easypost_shipment_id)
       else
         @ep_shipment ||= build_easypost_shipment
       end
@@ -48,8 +53,8 @@ module Spree
         from_address: stock_location.easypost_address,
         to_address: order.ship_address.easypost_address,
         parcel: build_parcel,
-        options: { print_custom_1: order.number + " // " + return_authorization.number, 
-                   print_custom_1_barcode: false,
+        options: { print_custom_1: return_authorization.number, 
+                   print_custom_1_barcode: true,
                    print_custom_2: build_sku_list, 
                    print_custom_2_barcode: false},
         is_return: true
