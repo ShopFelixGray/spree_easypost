@@ -58,13 +58,9 @@ Spree::Shipment.class_eval do
     def buy_easypost_rate
       raise "can only buy postage when order is ready" unless (self.state == 'ready' || self.state == 'shipped')
 
-      easypost_rate_id = selected_easy_post_rate_id
-
       # We need to get rates if it wasnt selected during checkout
-      if easypost_rate_id.nil?
-        refresh_rates(ShippingMethod::DISPLAY_ON_FRONT_AND_BACK_END)
-        self.reload
-        easypost_rate_id = selected_easy_post_rate_id
+      if selected_easy_post_rate_id.nil?
+        refresh_rates(Spree::ShippingMethod::DISPLAY_ON_FRONT_AND_BACK_END)
       end
 
       # Process payments if auto capture was off
@@ -72,7 +68,7 @@ Spree::Shipment.class_eval do
 
       # Get the selected rate
       rate = easypost_shipment.rates.find do |rate|
-        rate.id == easypost_rate_id
+        rate.id == selected_easy_post_rate_id
       end
 
       # Purchase the postage unless it was purchased before
