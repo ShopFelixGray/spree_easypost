@@ -9,6 +9,6 @@ module Spree
         has_many :shipments
 
         self.whitelisted_ransackable_associations = %w[stock_location shipments]
-        self.whitelisted_ransackable_attributes = %w[scan_form]
+        self.whitelisted_ransackable_attributes = %w[scan_form number]
     end
 end
