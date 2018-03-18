@@ -6,6 +6,9 @@ Spree::Core::Engine.add_routes do
         resources :return_labels
       end
     end
+
+    resources :scan_forms, only: [:index, :new, :create]
+
   end
 
   namespace :api do

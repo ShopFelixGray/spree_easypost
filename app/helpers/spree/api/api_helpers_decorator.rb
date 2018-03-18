@@ -6,6 +6,8 @@ module Spree
         @@customer_shipment_attributes = [:id, :number, :return_authorization_id, :tracking, :tracking_label, :weight, :created_at, :updated_at]
         
         @@shipment_attributes.push(:tracking_label)
+
+        @@stock_location_attributes.push(:time_zone)
     end
   end
 end
