@@ -1,25 +1,31 @@
 module Spree
     module Admin
-      class ScanFormsController < Spree::Admin::BaseController
+      class ScanFormsController < ResourceController
 
-  
+        before_action :load_data, only: [:new, :create]
+
         def index
-          collection(Spree::ScanForm)
-          respond_with(@collection)
-        end
-  
-        private
-  
-        def collection(resource)
-          return @collection if @collection.present?
           params[:q] ||= {}
   
-          @collection = resource.all
-          # @search needs to be defined as this is passed to search_form_for
-          @search = @collection.ransack(params[:q])
+          @scan_forms = ScanForm.all
+        
+          @search = @scan_forms.ransack(params[:q])
           per_page = params[:per_page] || Spree::Config[:admin_products_per_page]
-          @collection = @search.result.order(created_at: :desc).page(params[:page]).per(per_page)
+          @scan_forms = @search.result.order(created_at: :desc).page(params[:page]).per(per_page)
+
+          respond_with(@scan_forms)
         end
+
+        private
+
+        def load_data
+          @stock_locations = Spree::StockLocation.order(:name)
+        end
+
+        def model_class
+          Spree::ScanForm
+        end
+
       end
     end
   end

@@ -24,9 +24,9 @@
   </div>
 <% end %>
 
-<%= render 'spree/admin/shared/index_table_options', collection: @collection %>
+<%= render 'spree/admin/shared/index_table_options', collection: @scan_forms %>
 
-<% if @collection.any? %>
+<% if @scan_forms.any? %>
   <table class="table">
     <thead>
       <tr data-hook="rate_header">
@@ -37,7 +37,7 @@
       </tr>
     </thead>
     <tbody>
-      <% @collection.each do |scan_form| %>
+      <% @scan_forms.each do |scan_form| %>
         <tr id="<%= spree_dom_id scan_form %>" data-hook="scan_form_row">
           <td><%= scan_form.created_at.to_date %></td>
           <td><%= scan_form.number %></td>
@@ -55,4 +55,4 @@
   </div>
 <% end %>
 
-<%= render 'spree/admin/shared/index_table_options', collection: @collection, simple: true %>
+<%= render 'spree/admin/shared/index_table_options', collection: @scan_forms, simple: true %>
