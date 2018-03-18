@@ -1,5 +1,15 @@
 en:
+  activerecord:
+    models:
+      spree/scan_form:
+        one: Scan Form
+        other: Scan Forms
+      spree/customer_shipment:
+        one: Customer Shipment
+        other: Customer Shipments
   spree:
+    tracking: "Tracking"
+    tracking_search: "Tracking Search"
     tracking_label: "Tracking Label"
     customer_shipments_number: "Shipment Number"
     customer_shipments_state: "State"
@@ -10,4 +20,5 @@ en:
     use_easypost: "Use Easypost"
     shipping_easypost_rate_per_order: "Easypost Rate"
     scan_form: "Scan Form"
-    scan_form_stock_location: "Select a stock location to print a scan form for:"
+    time_zone: "Time Zone"
+    
