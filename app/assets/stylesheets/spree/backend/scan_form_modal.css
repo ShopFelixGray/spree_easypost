@@ -1,9 +1,0 @@
-.scan-modal__header {
-  position: relative;
-}
-
-.scan-modal__header button {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-}
