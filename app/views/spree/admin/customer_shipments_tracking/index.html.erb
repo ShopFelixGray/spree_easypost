@@ -1,0 +1,16 @@
+<% content_for :page_title do %>
+  <%= Spree.t(:customer_shipments) %>
+<% end %>
+
+<div class="panel-body">
+    <%= form_tag admin_customer_shipments_tracking_index_path, method: :get do %>
+    <div class="form-group" id="customer_shipments_tracking_field">
+        <%= label_tag :tracking, Spree.t(:tracking) %>
+        <%= text_field_tag :tracking, '', :autofocus => true, class: 'form-control' %>
+    </div>
+    <div class="form-actions">
+      <%= button Spree.t(:search), 'search', 'search', class: "btn-success" %>
+    </div>
+    <% end %>
+</div>
+

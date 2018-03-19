@@ -1,0 +1,58 @@
+<% content_for :page_title do %>
+  <%= Spree.t(:scan_forms) %>
+<% end %>
+
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:new_scan_form), new_admin_scan_form_url, :class => "btn-success", :icon => 'add', :id => 'admin_new_scan_form' %>
+<% end if can? :create, Spree::ScanForm %>
+
+<% content_for :table_filter do %>
+  <div data-hook="admin_scan_forms_index_filters">
+    <%= search_form_for [:admin, @search] do |f| %>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <%= f.label :number_cont, Spree.t(:number) %>
+            <%= f.text_field :number_cont, class: "form-control js-quick-search-target" %>
+          </div>
+        </div>
+      </div>
+      <div data-hook="admin_scan_forms_index_filters_buttons" class="form-actions">
+        <%= button Spree.t(:search), 'search' %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<%= render 'spree/admin/shared/index_table_options', collection: @scan_forms %>
+
+<% if @scan_forms.any? %>
+  <table class="table">
+    <thead>
+      <tr data-hook="rate_header">
+        <th><%= Spree.t(:created_at) %></th>
+        <th><%= Spree.t(:number) %></th>
+        <th><%= Spree.t(:stock_location) %></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @scan_forms.each do |scan_form| %>
+        <tr id="<%= spree_dom_id scan_form %>" data-hook="scan_form_row">
+          <td><%= scan_form.created_at.to_date %></td>
+          <td><%= scan_form.number %></td>
+          <td><%= scan_form.stock_location.admin_name %></td>
+          <td class="actions actions-1 text-right">
+            <%= link_to_with_icon 'file', Spree.t('scan_form'), scan_form.scan_form, class: 'scanform-item btn btn-primary btn-sm', title: Spree.t('scan_form'), no_text: true %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="alert alert-info no-objects-found">
+    <%= Spree.t(:no_resource_found, resource: Spree::ScanForm.model_name.human(count: :many)) %>.
+  </div>
+<% end %>
+
+<%= render 'spree/admin/shared/index_table_options', collection: @scan_forms, simple: true %>

@@ -1,0 +1,8 @@
+<div data-hook="admin_stock_locations_form_fields">
+
+  <div class="form-group" data-hook="stock_location_country">
+    <%= f.label :stock_location_id, Spree.t(:stock_location) %>
+    <span id="stock_location"><%= f.collection_select :stock_location_id, @stock_locations, :id, :name, {}, { class: 'select2' } %></span>
+  </div>
+ 
+</div>
