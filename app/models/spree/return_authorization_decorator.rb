@@ -12,7 +12,12 @@ Spree::ReturnAuthorization.class_eval do
   )
         
   def buy_postage
-    customer_shipments.create!
+    begin
+      customer_shipments.create!
+    rescue Exception => e
+      errors.add(:base, e.message)
+      raise ActiveRecord::Rollback
+    end
   end
 
   def create_label
