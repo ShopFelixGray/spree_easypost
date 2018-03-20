@@ -17,11 +17,16 @@ module Spree
     self.whitelisted_ransackable_attributes = %w[number tracking]
 
     def generate_label
-      easypost_shipment.buy(:rate => easypost_shipment.lowest_rate) unless easypost_shipment.postage_label
-      self.easypost_shipment_id = easypost_shipment.id
-      self.tracking = easypost_shipment.tracking_code
-      self.tracking_label = get_label_pdf
-      self.weight = easypost_shipment.parcel.weight
+      begin
+        easypost_shipment.buy(:rate => easypost_shipment.lowest_rate) unless easypost_shipment.postage_label
+        self.easypost_shipment_id = easypost_shipment.id
+        self.tracking = easypost_shipment.tracking_code
+        self.tracking_label = get_label_pdf
+        self.weight = easypost_shipment.parcel.weight
+      rescue ::EasyPost::Error => e
+        errors.add(:base, e.message)
+        return false
+      end
     end
 
     def refund_label
