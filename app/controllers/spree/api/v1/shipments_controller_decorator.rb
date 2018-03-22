@@ -21,10 +21,10 @@ module Spree
 
             def scan_form
                 begin
-                    @scan_form = Spree::ScanForm.create(stock_location_id: params[:stock_location_id])
+                    @scan_form = Spree::ScanForm.create!(stock_location_id: params[:stock_location_id])
                     render json: { scan_form: @scan_form.scan_form }
-                rescue ::EasyPost::Error => e
-                    render json: e.json_body, :status => :bad_request                    
+                rescue Exception => e
+                    render json: { :error => e.message } , :status => :bad_request                    
                 end
             end
 

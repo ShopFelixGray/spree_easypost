@@ -5,7 +5,7 @@ Deface::Override.new(:virtual_path => "spree/layouts/admin",
         <<-HTML
         <% if can? :admin, Spree::ScanForm %>
             <ul class="nav nav-sidebar">
-              <%= tab Spree::ScanForm, url: admin_scan_forms_url, icon: 'file', label: plural_resource_name(Spree::ScanForm) %>
+              <%= tab Spree::ScanForm, url: admin_scan_forms_url, icon: 'barcode', label: plural_resource_name(Spree::ScanForm) %>
             </ul>
           <% end %>
         HTML

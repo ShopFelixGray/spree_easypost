@@ -19,9 +19,14 @@ module Spree
         end
 
         def generate_scan_form
-            @scan_form = ::EasyPost::ScanForm.create(shipments: @easy_post_shipments)
-            self.easy_post_scan_form_id = @scan_form.id
-            self.scan_form = @scan_form.form_url
+            begin
+                @scan_form = ::EasyPost::ScanForm.create(shipments: @easy_post_shipments)
+                self.easy_post_scan_form_id = @scan_form.id
+                self.scan_form = @scan_form.form_url
+            rescue ::EasyPost::Error => e
+                errors.add(:base, e.message)
+                false
+            end
         end
 
         def get_easy_post_shipments
