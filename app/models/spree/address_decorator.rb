@@ -22,7 +22,7 @@ module Spree
       def easypost_address_validate
         zip4 = easypost_address.verifications.zip4
         delivery = easypost_address.verifications.delivery
-        failed_validations = !zip4.success || !delivery.success
+        failed_validations = !(zip4.success && delivery.success)
 
         if failed_validations
           zip4.errors.each { |error| errors.add(:zipcode, error.message) }
