@@ -1,6 +1,15 @@
 module Spree
   module EasyPost
     module AddressDecorator
+      def easypost_address_validate
+        verifications = easypost_address.verifications
+
+        add_validation_errors(verifications.zip4.errors)
+        add_validation_errors(verifications.delivery.errors)
+      end
+
+      private 
+
       def easypost_address
         attributes = {
           verify: ["delivery", "zip4"],
@@ -19,15 +28,34 @@ module Spree
         ::EasyPost::Address.create attributes
       end
 
-      def easypost_address_validate
-        zip4 = easypost_address.verifications.zip4
-        delivery = easypost_address.verifications.delivery
-        failed_validations = !(zip4.success && delivery.success)
+      def add_validation_errors(verification_errors)
+        verification_errors.each do |err|
+          err_code = err.try(:code)
+          err_key_name = easypost_errors[err_code]
 
-        if failed_validations
-          zip4.errors.each { |error| errors.add(:zipcode, error.message) }
-          delivery.errors.each { |error| errors.add(:delivery, error.message) }
+          errors.add(err_key_name, err.message) if err_key_name
         end
+      end
+
+      def easypost_errors
+        {
+          "E.HOUSE_NUMBER.MISSING" =>          :address1,
+          "E.HOUSE_NUMBER.INVALID" =>          :address1,
+          "E.STREET.MISSING" =>                :address1,
+          "E.STREET.INVALID" =>                :address1,
+          "E.BOX_NUMBER.MISSING" =>            :address1,
+          "E.BOX_NUMBER.INVALID" =>            :address1,
+          "E.SECONDARY_INFORMATION.INVALID" => :address2,
+          "E.SECONDARY_INFORMATION.MISSING" => :address2,
+          "E.ZIP.NOT_FOUND" =>                 :zipcode,
+          "E.ZIP.INVALID" =>                   :zipcode,
+          "E.ZIP.PLUS4.NOT_FOUND" =>           :zipcode,
+          "E.CITY_STATE.INVALID" =>            :city,
+          "E.STATE.INVALID" =>                 :state,
+          "E.ADDRESS.DELIVERY.INVALID" =>      :address,
+          "E.ADDRESS.INVALID" =>               :address,
+          "E.ADDRESS.NOT_FOUND" =>             :address
+        }
       end
     end
   end
