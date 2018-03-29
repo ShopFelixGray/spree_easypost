@@ -1,14 +1,18 @@
 module Spree
   module EasyPost
     module AddressDecorator
+      def self.prepended(base)
+        base.validate :easypost_address_validate
+      end
+
+      private 
+
       def easypost_address_validate
         verifications = easypost_address.verifications
 
         add_validation_errors(verifications.zip4.errors)
         add_validation_errors(verifications.delivery.errors)
       end
-
-      private 
 
       def easypost_address
         attributes = {
