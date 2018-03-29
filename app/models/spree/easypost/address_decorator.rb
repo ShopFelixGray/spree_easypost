@@ -8,15 +8,18 @@ module Spree
       private 
 
       def easypost_address_validate
-        verifications = easypost_address.verifications
+        ep_address = easypost_address
+        verifications = ep_address.verifications
 
-        add_validation_errors(verifications.zip4.errors)
+        update_address_with_easypost_values(ep_address)
+
         add_validation_errors(verifications.delivery.errors)
+        add_validation_errors(verifications.zip4.errors)
       end
 
       def easypost_address
         attributes = {
-          verify: ["delivery", "zip4"],
+          verify: ["zip4", "delivery"],
           street1: address1,
           street2: address2,
           city: city,
@@ -30,6 +33,15 @@ module Spree
         attributes[:country] = country.try(:iso)
 
         ::EasyPost::Address.create attributes
+      end
+
+      def update_address_with_easypost_values(ep_address)
+        self.tap do |address|
+          address.address1 = ep_address.street1
+          address.address2 = ep_address.street2
+          address.city = ep_address.city
+          address.zipcode = ep_address.zip
+        end
       end
 
       def add_validation_errors(verification_errors)
