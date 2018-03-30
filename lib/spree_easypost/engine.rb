@@ -9,6 +9,14 @@ module SpreeEasypost
       g.test_framework :rspec
     end
 
+    initializer 'spree.easypost.preferences', before: :load_config_initializers do |app|
+     Spree::AppConfiguration.class_eval do
+       preference :buy_postage_when_shipped, :boolean, default: false
+       preference :auto_capture_on_postage_buy, :boolean, default: false # Captures payment for each shipment in Shipment#buy_easypost_rate callback, and buys rate when payment is authorized!
+       preference :validate_address_with_easypost, :boolean, default: true
+     end
+   end
+
     def self.activate
       Dir.glob(File.join(File.dirname(__FILE__), '../../app/**/*_decorator*.rb')) do |c|
         Rails.configuration.cache_classes ? require(c) : load(c)

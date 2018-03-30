@@ -5,7 +5,7 @@ Spree::Shipment.class_eval do
     self.state_machine.before_transition(
       to: :shipped,
       do: :buy_easypost_rate,
-      if: -> { Spree::Config[:buy_postage] }
+      if: -> { Spree::Config[:buy_postage_when_shipped] }
     )
 
     def determine_state(order)
@@ -107,7 +107,7 @@ Spree::Shipment.class_eval do
         from_address: stock_location.easypost_address,
         parcel: to_package.easypost_parcel,
         options: { label_date: get_formatted_time,
-        print_custom_1: build_custom_1, 
+        print_custom_1: build_custom_1,
         print_custom_1_barcode: false,
         print_custom_2: build_custom_2,
         print_custom_2_barcode: false },
