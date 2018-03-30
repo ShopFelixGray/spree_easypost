@@ -5,7 +5,7 @@ module Spree
         base.validate :easypost_address_validate
       end
 
-      private 
+      private
 
       def easypost_address_validate
         ep_address = easypost_address
@@ -79,4 +79,3 @@ end
 
 Spree::Address.prepend Spree::EasyPost::AddressDecorator
 Spree::StockLocation.prepend Spree::EasyPost::AddressDecorator
-
