@@ -15,8 +15,8 @@
         </p>
 
         <p>
-          <label><%= t('easypost_validate_address') %></label><br />
-          <%= check_box_tag('settings[easypost_validate_address]', true, Spree::Config.easypost_validate_address, class: 'easypost') %>
+          <label><%= t('validate_address_with_easypost') %></label><br />
+          <%= check_box_tag('settings[validate_address_with_easypost]', true, Spree::Config.validate_address_with_easypost, class: 'easypost') %>
         </p>
       </fieldset>
     </div>

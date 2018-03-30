@@ -7,7 +7,7 @@ module Spree
       def update
         Spree::Config.buy_postage = easypost_settings_params[:buy_postage]
         Spree::Config.auto_capture_on_postage_buy = easypost_settings_params[:auto_capture_on_postage_buy]
-        Spree::Config.easypost_validate_address = easypost_settings_params[:easypost_validate_address]
+        Spree::Config.validate_address_with_easypost = easypost_settings_params[:validate_address_with_easypost]
 
         redirect_to :back
       end
@@ -15,7 +15,7 @@ module Spree
       private
 
       def easypost_settings_params
-        params.require(:settings).permit(:buy_postage, :auto_capture_on_postage_buy, :easypost_validate_address)
+        params.require(:settings).permit(:buy_postage, :auto_capture_on_postage_buy, :validate_address_with_easypost)
       end
     end
   end

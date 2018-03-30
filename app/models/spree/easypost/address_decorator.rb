@@ -8,6 +8,8 @@ module Spree
       private
 
       def easypost_address_validate
+        return if !Spree::Config.validate_address_with_easypost
+        
         ep_address = easypost_address
         verifications = ep_address.verifications
 
