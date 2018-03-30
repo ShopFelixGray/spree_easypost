@@ -78,12 +78,11 @@ Spree::Shipment.class_eval do
     end
 
     def build_custom_1
-      order.number
+      self.number
     end
 
     def build_custom_2
-      inventory_units = order.inventory_units
-      inventory_units.map{|v| v.variant.sku }.join("|")[0..35]
+      self.inventory_units.map{|v| v.variant.sku }.join("|")[0..35]
     end
 
     private
@@ -108,7 +107,7 @@ Spree::Shipment.class_eval do
         parcel: to_package.easypost_parcel,
         options: { label_date: get_formatted_time,
         print_custom_1: build_custom_1, 
-        print_custom_1_barcode: false,
+        print_custom_1_barcode: true,
         print_custom_2: build_custom_2,
         print_custom_2_barcode: false },
       )
