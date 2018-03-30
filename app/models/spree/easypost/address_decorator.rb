@@ -5,20 +5,6 @@ module Spree
         base.validate :easypost_address_validate
       end
 
-      private
-
-      def easypost_address_validate
-        return if !Spree::Config.validate_address_with_easypost
-        
-        ep_address = easypost_address
-        verifications = ep_address.verifications
-
-        update_address_with_easypost_values(ep_address)
-
-        add_validation_errors(verifications.delivery.errors)
-        add_validation_errors(verifications.zip4.errors)
-      end
-
       def easypost_address
         attributes = {
           verify: ["zip4", "delivery"],
@@ -36,6 +22,21 @@ module Spree
 
         ::EasyPost::Address.create attributes
       end
+
+      private
+
+      def easypost_address_validate
+        return if !Spree::Config.validate_address_with_easypost
+
+        ep_address = easypost_address
+        verifications = ep_address.verifications
+
+        update_address_with_easypost_values(ep_address)
+
+        add_validation_errors(verifications.delivery.errors)
+        add_validation_errors(verifications.zip4.errors)
+      end
+
 
       def update_address_with_easypost_values(ep_address)
         self.tap do |address|
