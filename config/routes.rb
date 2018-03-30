@@ -10,7 +10,8 @@ Spree::Core::Engine.add_routes do
     resources :scan_forms, only: [:index, :new, :create]
 
     resources :customer_shipments_tracking, only: [:index]
-    
+
+    resources :easypost_settings, only: [:edit, :update]
   end
 
   namespace :api do

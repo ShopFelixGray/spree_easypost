@@ -14,8 +14,7 @@ module Spree
       end
 
       def build_sku_list
-        inventory_units = order.inventory_units
-        inventory_units.map{|v| v.variant.sku }.join("|")[0..35] # Most carriers have a 35 char limit
+        contents.map { |item| item.variant.sku }.join("|")[0..35] # Most carriers have a 35 char limit
       end
 
       def easypost_shipment
@@ -24,7 +23,7 @@ module Spree
           from_address: stock_location.easypost_address,
           parcel: easypost_parcel,
           options: { print_custom_1: order.number, 
-          print_custom_1_barcode: false,
+          print_custom_1_barcode: true,
           print_custom_2: build_sku_list, 
           print_custom_2_barcode: false},
         )
