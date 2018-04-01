@@ -21,4 +21,6 @@ en:
     shipping_easypost_rate_per_order: "Easypost Rate"
     scan_form: "Scan Form"
     time_zone: "Time Zone"
+    admin:
+      easy_post_hs_tariff_number: "Tariff Number"
     

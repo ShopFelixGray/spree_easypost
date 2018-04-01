@@ -1,12 +1,9 @@
 module Spree
   module Stock
     module PackageDecorator
-      def easypost_parcel
-        total_weight = contents.sum do |item|
-          item.quantity * item.variant.weight
-        end
 
-        ::EasyPost::Parcel.create weight: total_weight
+      def easypost_parcel
+        ::EasyPost::Parcel.create weight: weight
       end
 
       def use_easypost?
@@ -27,15 +24,19 @@ module Spree
         customs_items = []
 
         contents.each do |item|
+          variant = item.variant
+          product = variant.product
           customs_items << ::EasyPost::CustomsItem.create(
-            description: 'Product Description',
+            description: product.taxons.map { |taxon| taxon.name }.join(" "),
             quantity: item.quantity,
-            value: item.variant.price,
-            weight: item.variant.weight,
-            hs_tariff_number: '610910',
+            value: variant.price * item.quantity,
+            weight: variant.weight,
+            hs_tariff_number: product.easy_post_hs_tariff_number,
             origin_country: stock_location.country.try(:iso),
           )
         end
+
+        raise "Contact Support For EEL/PFC" if order.total > 2500
 
         ::EasyPost::CustomsInfo.create(
           eel_pfc: Spree::Config[:customs_eel_pfc],
