@@ -17,11 +17,41 @@ module Spree
         contents.map { |item| item.variant.sku }.join("|")[0..35] # Most carriers have a 35 char limit
       end
 
+      def customs_required?
+       shipping_address = order.ship_address
+       (stock_location.country != shipping_address.country) || (shipping_address.state.name.include? "Armed Forces")
+      end
+
+      def easypost_customs_info
+        return if !customs_required?
+        customs_items = []
+
+        contents.each do |item|
+          customs_items << ::EasyPost::CustomsItem.create(
+            description: 'Product Description',
+            quantity: item.quantity,
+            value: item.variant.price,
+            weight: item.variant.weight,
+            hs_tariff_number: '610910',
+            origin_country: stock_location.country.try(:iso),
+          )
+        end
+
+        ::EasyPost::CustomsInfo.create(
+          eel_pfc: Spree::Config[:customs_eel_pfc],
+          customs_certify: true,
+          customs_signer: Spree::Config[:customs_signer],
+          contents_type: Spree::Config[:customs_contents_type],
+          customs_items: customs_items,
+        )
+      end
+
       def easypost_shipment
         ::EasyPost::Shipment.create(
           to_address: order.ship_address.easypost_address,
           from_address: stock_location.easypost_address,
           parcel: easypost_parcel,
+          customs_info: easypost_customs_info,
           options: { print_custom_1: order.number, 
           print_custom_1_barcode: true,
           print_custom_2: build_sku_list, 
