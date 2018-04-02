@@ -58,10 +58,9 @@ Spree::Shipment.class_eval do
     def buy_easypost_rate
       raise "can only buy postage when order is ready" unless (self.state == 'ready' || self.state == 'shipped')
 
-      # We need to get rates if it wasnt selected during checkout
-      if selected_easy_post_rate_id.nil?
-        refresh_rates(Spree::ShippingMethod::DISPLAY_ON_FRONT_AND_BACK_END)
-      end
+      # regenerate the rates so we get updated data
+      refresh_rates(Spree::ShippingMethod::DISPLAY_ON_FRONT_AND_BACK_END)
+      @ep_shipment = nil
 
       # Process payments if auto capture was off
       process_order_payments if Spree::Config[:auto_capture_on_postage_buy]
@@ -77,14 +76,6 @@ Spree::Shipment.class_eval do
       self.tracking_label = easypost_shipment.postage_label.label_url
     end
 
-    def build_custom_1
-      self.number
-    end
-
-    def build_custom_2
-      self.inventory_units.map{|v| v.variant.sku }.join("|")[0..35]
-    end
-
     private
 
     def selected_easy_post_rate_id
@@ -95,21 +86,19 @@ Spree::Shipment.class_eval do
       self.selected_shipping_rate.easy_post_shipment_id
     end
 
-    def get_formatted_time
-      iso_time = Time.now
-      iso_time.iso8601
-    end
-
     def build_easypost_shipment
+      ep_package = to_package
       ::EasyPost::Shipment.create(
         to_address: order.ship_address.easypost_address,
         from_address: stock_location.easypost_address,
-        parcel: to_package.easypost_parcel,
-        options: { label_date: get_formatted_time,
-        print_custom_1: build_custom_1,
-        print_custom_1_barcode: true,
-        print_custom_2: build_custom_2,
-        print_custom_2_barcode: false },
+        parcel: ep_package.easypost_parcel,
+        customs_info: ep_package.easypost_customs_info,
+        options: {
+          print_custom_1: ep_package.ref_number,
+          print_custom_1_barcode: true,
+          print_custom_2: ep_package.build_sku_list,
+          print_custom_2_barcode: false 
+        },
       )
     end
 end
