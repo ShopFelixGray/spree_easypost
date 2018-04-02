@@ -1,17 +1,19 @@
 <h1><%= t('easypost_settings') %></h1>
 
-<%= form_tag(admin_easypost_setting_path, method: :put, id: :easypost_settings_form) do %>
+<%= form_tag admin_easypost_setting_path, method: :put, id: :easypost_settings_form do %>
   <div class="yui-g">
     <div class="yui-u first">
       <fieldset>
         <p>
           <label><%= t('buy_postage_when_shipped') %></label><br />
-          <%= check_box_tag('settings[buy_postage_when_shipped]', true, Spree::Config.buy_postage_when_shipped, class: 'easypost') %>
+          <%= hidden_field_tag 'settings[buy_postage_when_shipped]', false %>
+          <%= check_box_tag 'settings[buy_postage_when_shipped]', true, Spree::Config.buy_postage_when_shipped, class: 'easypost' %>
         </p>
 
         <p>
           <label><%= t('validate_address_with_easypost') %></label><br />
-          <%= check_box_tag('settings[validate_address_with_easypost]', true, Spree::Config.validate_address_with_easypost, class: 'easypost') %>
+          <%= hidden_field_tag 'settings[validate_address_with_easypost]', false %>
+          <%= check_box_tag 'settings[validate_address_with_easypost]', true, Spree::Config.validate_address_with_easypost, class: 'easypost' %>
         </p>
       </fieldset>
     </div>
