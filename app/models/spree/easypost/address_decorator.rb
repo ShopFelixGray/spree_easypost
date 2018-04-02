@@ -33,8 +33,8 @@ module Spree
 
         update_address_with_easypost_values(ep_address)
 
-        add_validation_errors(verifications.delivery.errors)
-        add_validation_errors(verifications.zip4.errors)
+        add_validation_errors(verifications.delivery.errors) if !verifications.delivery.success
+        add_validation_errors(verifications.zip4.errors) if !verifications.zip4.success
       end
 
 
