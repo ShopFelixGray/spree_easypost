@@ -51,19 +51,13 @@ module Spree
         )
       end
 
-      def get_formatted_time
-        iso_time = Time.now.in_time_zone(stock_location.time_zone)
-        iso_time.iso8601
-      end
-
       def easypost_shipment
         ::EasyPost::Shipment.create(
           to_address: order.ship_address.easypost_address,
           from_address: stock_location.easypost_address,
           parcel: easypost_parcel,
           customs_info: easypost_customs_info,
-          options: { 
-            #label_date: get_formatted_time,
+          options: {
             print_custom_1: ref_number, 
             print_custom_1_barcode: true,
             print_custom_2: build_sku_list, 

@@ -93,8 +93,7 @@ Spree::Shipment.class_eval do
         from_address: stock_location.easypost_address,
         parcel: ep_package.easypost_parcel,
         customs_info: ep_package.easypost_customs_info,
-        options: { 
-          label_date: ep_package.get_formatted_time,
+        options: {
           print_custom_1: ep_package.ref_number,
           print_custom_1_barcode: true,
           print_custom_2: ep_package.build_sku_list,
