@@ -12,7 +12,6 @@ module SpreeEasypost
     initializer 'spree.easypost.preferences', before: :load_config_initializers do |app|
      Spree::AppConfiguration.class_eval do
        preference :buy_postage_when_shipped, :boolean, default: false
-       preference :auto_capture_on_postage_buy, :boolean, default: false # Captures payment for each shipment in Shipment#buy_easypost_rate callback, and buys rate when payment is authorized!
        preference :validate_address_with_easypost, :boolean, default: false
        preference :customs_signer, :string, default: ''
        preference :customs_contents_type, :string, default: 'merchandise'

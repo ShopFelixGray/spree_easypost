@@ -10,11 +10,6 @@
         </p>
 
         <p>
-          <label><%= t('auto_capture_on_postage_buy') %></label><br />
-          <%= check_box_tag('settings[auto_capture_on_postage_buy]', true, Spree::Config.auto_capture_on_postage_buy, class: 'easypost') %>
-        </p>
-
-        <p>
           <label><%= t('validate_address_with_easypost') %></label><br />
           <%= check_box_tag('settings[validate_address_with_easypost]', true, Spree::Config.validate_address_with_easypost, class: 'easypost') %>
         </p>
