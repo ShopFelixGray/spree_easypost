@@ -25,12 +25,12 @@ module Spree
 
       def easypost_customs_info
         return if !customs_required?
-        customs_items = []
-
-        contents.each do |item|
+ 
+        customs_items = contents.map do |item|
           variant = item.variant
           product = variant.product
-          customs_items << ::EasyPost::CustomsItem.create(
+          
+          ::EasyPost::CustomsItem.create(
             description: product.taxons.map { |taxon| taxon.name }.join(" "),
             quantity: item.quantity,
             value: variant.price * item.quantity,
