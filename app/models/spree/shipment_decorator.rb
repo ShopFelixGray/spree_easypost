@@ -61,7 +61,6 @@ Spree::Shipment.class_eval do
       # regenerate the rates so we get updated data
       refresh_rates(Spree::ShippingMethod::DISPLAY_ON_FRONT_AND_BACK_END)
       @ep_shipment = nil
-      self.reload
 
       # Process payments if auto capture was off
       process_order_payments if Spree::Config[:auto_capture_on_postage_buy]
