@@ -5,16 +5,28 @@ module Spree
       end
 
       def update
-        Spree::Config.buy_postage_when_shipped = easypost_settings_params[:buy_postage_when_shipped]
-        Spree::Config.validate_address_with_easypost = easypost_settings_params[:validate_address_with_easypost]
-        Spree::Config.use_easypost_on_frontend = easypost_settings_params[:use_easypost_on_frontend]
+        update_easypost_settings
+
         redirect_to :back
       end
 
       private
 
+      def update_easypost_settings
+        easypost_settings_params.each do |key, value|
+          Spree::Config[key] = value
+        end
+      end
+
       def easypost_settings_params
-        params.require(:settings).permit(:buy_postage_when_shipped, :validate_address_with_easypost, :use_easypost_on_frontend)
+        params.require(:settings).permit(
+            :buy_postage_when_shipped,
+            :validate_address_with_easypost,
+            :use_easypost_on_frontend,
+            :customs_signer,
+            :customs_contents_type,
+            :customs_eel_pfc
+        )
       end
     end
   end

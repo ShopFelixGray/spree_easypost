@@ -21,6 +21,21 @@
           <%= hidden_field_tag 'settings[validate_address_with_easypost]', false %>
           <%= check_box_tag 'settings[validate_address_with_easypost]', true, Spree::Config.validate_address_with_easypost, class: 'easypost' %>
         </p>
+
+        <p>
+          <label<%= t('customs_signer') %></label><br />
+          <%=  text_field_tag 'settings[customs_signer]', Spree::Config.customs_signer %>
+        </p>
+
+        <p>
+          <label<%= t('customs_contents_type') %></label><br />
+          <%=  text_field_tag 'settings[customs_contents_type]', Spree::Config.customs_contents_type %>
+        </p>
+
+        <p>
+          <label<%= t('customs_eel_pfc') %></label><br />
+          <%=  text_field_tag 'settings[customs_eel_pfc]', Spree::Config.customs_eel_pfc %>
+        </p>
       </fieldset>
     </div>
   </div>
