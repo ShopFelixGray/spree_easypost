@@ -13,6 +13,7 @@ module SpreeEasypost
      Spree::AppConfiguration.class_eval do
        preference :buy_postage_when_shipped, :boolean, default: false
        preference :validate_address_with_easypost, :boolean, default: false
+       preference :use_easypost_on_frontend, :boolean, default: false
        preference :customs_signer, :string, default: ''
        preference :customs_contents_type, :string, default: 'merchandise'
        preference :customs_eel_pfc, :string, default: 'NOEEI 30.37(a)'

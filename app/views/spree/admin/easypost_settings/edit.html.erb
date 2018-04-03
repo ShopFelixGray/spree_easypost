@@ -11,6 +11,12 @@
         </p>
 
         <p>
+          <label><%= t('use_easypost_on_frontend') %></label><br />
+          <%= hidden_field_tag 'settings[use_easypost_on_frontend]', false %>
+          <%= check_box_tag 'settings[use_easypost_on_frontend]', true, Spree::Config.use_easypost_on_frontend, class: 'easypost' %>
+        </p>
+
+        <p>
           <label><%= t('validate_address_with_easypost') %></label><br />
           <%= hidden_field_tag 'settings[validate_address_with_easypost]', false %>
           <%= check_box_tag 'settings[validate_address_with_easypost]', true, Spree::Config.validate_address_with_easypost, class: 'easypost' %>

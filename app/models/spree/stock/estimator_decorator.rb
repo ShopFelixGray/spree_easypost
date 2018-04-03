@@ -3,7 +3,10 @@ module Spree
     module EstimatorDecorator
       def shipping_rates(package, shipping_method_filter = ShippingMethod::DISPLAY_ON_FRONT_END)
 
-        if package.use_easypost?
+        if package.use_easypost? && 
+          ((shipping_method_filter == ShippingMethod::DISPLAY_ON_FRONT_END) && 
+                    Spree::Config.use_easypost_on_frontend)
+
           shipment = package.easypost_shipment
           rates = shipment.rates.sort_by { |r| r.rate.to_i }
     
