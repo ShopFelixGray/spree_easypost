@@ -24,12 +24,12 @@ module Spree
 
         ep_address = easypost_address
         verifications = ep_address.verifications
+        update_address_with_easypost_values(ep_address)
 
         unless success?(verifications.delivery) && success?(verifications.zip4)
           handle_delivery_errors(verifications)
           return false
         else
-          update_address_with_easypost_values(ep_address)
           return true
         end
       end
