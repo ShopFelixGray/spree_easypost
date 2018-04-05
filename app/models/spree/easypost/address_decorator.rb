@@ -1,10 +1,6 @@
 module Spree
   module EasyPost
     module AddressDecorator
-      def self.prepended(base)
-        base.validate :easypost_address_validate
-      end
-
       def easypost_address
         attributes = {
           verify: ["zip4", "delivery"],
@@ -23,20 +19,47 @@ module Spree
         ::EasyPost::Address.create attributes
       end
 
-      private
-
       def easypost_address_validate
-        return if !Spree::Config.validate_address_with_easypost
+        return true if !Spree::Config.validate_address_with_easypost
 
         ep_address = easypost_address
         verifications = ep_address.verifications
 
-        update_address_with_easypost_values(ep_address)
-
-        add_validation_errors(verifications.delivery.errors) if !verifications.delivery.success
-        add_validation_errors(verifications.zip4.errors) if !verifications.zip4.success
+        unless success?(verifications.delivery) && success?(verifications.zip4)
+          handle_delivery_errors(verifications)
+          return false
+        else
+          update_address_with_easypost_values(ep_address)
+          return true
+        end
       end
 
+      private
+
+      def success?(verification)
+        no_errors = !contains_errors_despite_success?(verification.errors)
+        successful = verification.success
+        no_errors && successful
+      end
+
+      def contains_errors_despite_success?(errors)
+        unacceptable_errors = [
+          "E.SECONDARY_INFORMATION.INVALID",
+          "E.SECONDARY_INFORMATION.MISSING"
+        ]
+
+        errors.select { |e| unacceptable_errors.include? e.code }.any?
+      end
+
+      def handle_delivery_errors(verifications)
+        add_validation_errors(verifications.zip4.errors)
+        add_validation_errors(verifications.delivery.errors)
+      end
+
+      def handle_delivery_errors(verifications)
+        add_validation_errors(verifications.delivery.errors)
+        add_validation_errors(verifications.zip4.errors)
+      end
 
       def update_address_with_easypost_values(ep_address)
         self.tap do |address|
