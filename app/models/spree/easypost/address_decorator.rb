@@ -56,11 +56,6 @@ module Spree
         add_validation_errors(verifications.delivery.errors)
       end
 
-      def handle_delivery_errors(verifications)
-        add_validation_errors(verifications.delivery.errors)
-        add_validation_errors(verifications.zip4.errors)
-      end
-
       def update_address_with_easypost_values(ep_address)
         self.tap do |address|
           address.address1 = ep_address.street1
