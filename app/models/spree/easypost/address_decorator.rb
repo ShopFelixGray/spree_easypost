@@ -52,7 +52,7 @@ module Spree
       def get_errors(verifications)
         zip4_errors = add_validation_errors(verifications.zip4.errors)
         delivery_errors = add_validation_errors(verifications.delivery.errors)
-        zip4_errors.concat delivery_errors
+        zip4_errors.merge delivery_errors
       end
 
       def address_suggestions(ep_address)
@@ -65,11 +65,19 @@ module Spree
       end
 
       def add_validation_errors(verification_errors)
-        verification_errors.inject([]) do |prev, err|
+        verification_errors.inject({}) do |prev, err|
           err_code = err.try(:code)
           err_key_name = easypost_errors[err_code]
 
-          prev.push(err_key_name, err.message) if err_key_name
+          if err_key_name.present?
+            if prev[err_key_name].present?
+              prev[err_key_name].push err.message
+            else
+              prev[err_key_name] = [err.message]
+            end
+          end
+
+          prev
         end
       end
 
