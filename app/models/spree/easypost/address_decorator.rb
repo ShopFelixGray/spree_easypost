@@ -24,13 +24,11 @@ module Spree
 
         ep_address = easypost_address
         verifications = ep_address.verifications
-        update_address_with_easypost_values(ep_address)
 
         unless success?(verifications.delivery) && success?(verifications.zip4)
-          handle_delivery_errors(verifications)
-          return false
+          return { errors: get_errors(verifications) }
         else
-          return true
+          return { suggestions: address_suggestions(ep_address) }
         end
       end
 
@@ -51,26 +49,27 @@ module Spree
         errors.select { |e| unacceptable_errors.include? e.code }.any?
       end
 
-      def handle_delivery_errors(verifications)
-        add_validation_errors(verifications.zip4.errors)
-        add_validation_errors(verifications.delivery.errors)
+      def get_errors(verifications)
+        zip4_errors = add_validation_errors(verifications.zip4.errors)
+        delivery_errors = add_validation_errors(verifications.delivery.errors)
+        zip4_errors.concat delivery_errors
       end
 
-      def update_address_with_easypost_values(ep_address)
-        self.tap do |address|
-          address.address1 = ep_address.street1
-          address.address2 = ep_address.street2
-          address.city = ep_address.city
-          address.zipcode = ep_address.zip
-        end
+      def address_suggestions(ep_address)
+        {
+          address1: ep_address.street1,
+          address2: ep_address.street2,
+          city: ep_address.city,
+          zipcode: ep_address.zip
+        }
       end
 
       def add_validation_errors(verification_errors)
-        verification_errors.each do |err|
+        verification_errors.inject([]) do |prev, err|
           err_code = err.try(:code)
           err_key_name = easypost_errors[err_code]
 
-          errors.add(err_key_name, err.message) if err_key_name
+          prev.push(err_key_name, err.message) if err_key_name
         end
       end
 
@@ -94,6 +93,7 @@ module Spree
           "E.ADDRESS.NOT_FOUND" =>             :address
         }
       end
+
     end
   end
 end
