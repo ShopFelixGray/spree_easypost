@@ -69,12 +69,10 @@ module Spree
           err_code = err.try(:code)
           err_key_name = easypost_errors[err_code]
 
-          if err_key_name.present?
-            if prev[err_key_name].present?
-              prev[err_key_name].push err.message
-            else
-              prev[err_key_name] = [err.message]
-            end
+          if prev[err_key_name].present?
+            prev[err_key_name].push err.message
+          else
+            prev[err_key_name] = [err.message]
           end
 
           prev
