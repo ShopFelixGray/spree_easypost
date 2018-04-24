@@ -1,10 +1,6 @@
 module Spree
   module EasyPost
     module AddressDecorator
-      def self.prepended(base)
-        base.validate :easypost_address_validate
-      end
-
       def easypost_address
         attributes = {
           verify: ["zip4", "delivery"],
@@ -23,36 +19,63 @@ module Spree
         ::EasyPost::Address.create attributes
       end
 
-      private
-
       def easypost_address_validate
-        return if !Spree::Config.validate_address_with_easypost
+        return true if !Spree::Config.validate_address_with_easypost
 
         ep_address = easypost_address
         verifications = ep_address.verifications
 
-        update_address_with_easypost_values(ep_address)
-
-        add_validation_errors(verifications.delivery.errors) if !verifications.delivery.success
-        add_validation_errors(verifications.zip4.errors) if !verifications.zip4.success
-      end
-
-
-      def update_address_with_easypost_values(ep_address)
-        self.tap do |address|
-          address.address1 = ep_address.street1
-          address.address2 = ep_address.street2
-          address.city = ep_address.city
-          address.zipcode = ep_address.zip
+        unless success?(verifications.delivery) && success?(verifications.zip4)
+          return { errors: get_errors(verifications) }
+        else
+          return { suggestions: address_suggestions(ep_address) }
         end
       end
 
+      private
+
+      def success?(verification)
+        no_errors = !contains_errors_despite_success?(verification.errors)
+        successful = verification.success
+        no_errors && successful
+      end
+
+      def contains_errors_despite_success?(errors)
+        unacceptable_errors = [
+          "E.SECONDARY_INFORMATION.INVALID",
+          "E.SECONDARY_INFORMATION.MISSING"
+        ]
+
+        errors.select { |e| unacceptable_errors.include? e.code }.any?
+      end
+
+      def get_errors(verifications)
+        zip4_errors = add_validation_errors(verifications.zip4.errors)
+        delivery_errors = add_validation_errors(verifications.delivery.errors)
+        zip4_errors.merge delivery_errors
+      end
+
+      def address_suggestions(ep_address)
+        {
+          address1: ep_address.street1,
+          address2: ep_address.street2,
+          city: ep_address.city,
+          zipcode: ep_address.zip
+        }
+      end
+
       def add_validation_errors(verification_errors)
-        verification_errors.each do |err|
+        verification_errors.inject({}) do |prev, err|
           err_code = err.try(:code)
           err_key_name = easypost_errors[err_code]
 
-          errors.add(err_key_name, err.message) if err_key_name
+          if prev[err_key_name].present?
+            prev[err_key_name].push err.message
+          else
+            prev[err_key_name] = [err.message]
+          end
+
+          prev
         end
       end
 
@@ -76,6 +99,7 @@ module Spree
           "E.ADDRESS.NOT_FOUND" =>             :address
         }
       end
+
     end
   end
 end
