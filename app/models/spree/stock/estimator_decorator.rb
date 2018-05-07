@@ -3,7 +3,14 @@ module Spree
     module EstimatorDecorator
       def shipping_rates(package, shipping_method_filter = ShippingMethod::DISPLAY_ON_FRONT_END)
 
-        if package.use_easypost?
+        # Only use easypost on the FrontEnd if the flag is set and the package
+        # flag allows for it to be used. Otherwise use the default spree methods.
+        # This allows for faster load times on the front end if we dont want to do dyanmic shipping
+
+        if package.use_easypost? &&
+          (ShippingMethod::DISPLAY_ON_BACK_END || 
+          ShippingMethod::DISPLAY_ON_FRONT_AND_BACK_END ||
+          (Spree::Config[:use_easypost_on_frontend] && ShippingMethod::DISPLAY_ON_FRONT_END))
           shipment = package.easypost_shipment
           rates = shipment.rates.sort_by { |r| r.rate.to_i }
     
