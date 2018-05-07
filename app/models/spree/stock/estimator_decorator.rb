@@ -7,10 +7,7 @@ module Spree
         # flag allows for it to be used. Otherwise use the default spree methods.
         # This allows for faster load times on the front end if we dont want to do dyanmic shipping
 
-        if package.use_easypost? &&
-          (ShippingMethod::DISPLAY_ON_BACK_END || 
-          ShippingMethod::DISPLAY_ON_FRONT_AND_BACK_END ||
-          (Spree::Config[:use_easypost_on_frontend] && ShippingMethod::DISPLAY_ON_FRONT_END))
+        if use_easypost_to_calculate_rate?(package, shipping_method_filter)
           shipment = package.easypost_shipment
           rates = shipment.rates.sort_by { |r| r.rate.to_i }
     
@@ -50,6 +47,18 @@ module Spree
       end
   
       private
+
+      def use_easypost_to_calculate_rate?(package, shipping_method_filter)
+        package.use_easypost? &&
+        (ShippingMethod::DISPLAY_ON_BACK_END == shipping_method_filter || 
+        ShippingMethod::DISPLAY_ON_FRONT_AND_BACK_END == shipping_method_filter ||
+        is_shipping_rate_dynamic_on_front_end?(shipping_method_filter))
+      end
+
+      def is_shipping_rate_dynamic_on_front_end?(shipping_method_filter)
+        Spree::Config[:use_easypost_on_frontend] && 
+        (ShippingMethod::DISPLAY_ON_FRONT_END == shipping_method_filter)
+      end
   
       # Cartons require shipping methods to be present, This will lookup a
       # Shipping method based on the admin(internal)_name. This is not user facing
