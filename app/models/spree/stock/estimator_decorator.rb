@@ -9,7 +9,7 @@ module Spree
 
         if package.use_easypost? &&
           (ShippingMethod::DISPLAY_ON_BACK_END || 
-          ShippingMethod::DISPLAY_ON_BOTH ||
+          ShippingMethod::DISPLAY_ON_FRONT_AND_BACK_END ||
           (Spree::Config[:use_easypost_on_frontend] && ShippingMethod::DISPLAY_ON_FRONT_END))
           shipment = package.easypost_shipment
           rates = shipment.rates.sort_by { |r| r.rate.to_i }
