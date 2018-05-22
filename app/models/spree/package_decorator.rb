@@ -2,12 +2,14 @@ module Spree
   module Stock
     module PackageDecorator
 
+      US_STATES_REQUIRING_CUSTOMS = ["AS", "GU", "MP", "PR", "VI", "UM". "AP", "AE", "AA"]
+
       def easypost_parcel
         ::EasyPost::Parcel.create weight: weight
       end
 
       def use_easypost?
-        shipping_categories.any? { |shipping_category| shipping_category.use_easypost }
+        order.ship_address.present? && shipping_categories.any? { |shipping_category| shipping_category.use_easypost }
       end
 
       def build_sku_list
@@ -20,7 +22,8 @@ module Spree
 
       def customs_required?
        shipping_address = order.ship_address
-       (stock_location.country != shipping_address.country) || (shipping_address.state.name.include? "Armed Forces")
+       (stock_location.country != shipping_address.country) ||
+       (US_STATES_REQUIRING_CUSTOMS.any? { |i| i[shipping_address.state.abbr] })
       end
 
       def easypost_customs_info
