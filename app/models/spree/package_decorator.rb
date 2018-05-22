@@ -2,7 +2,7 @@ module Spree
   module Stock
     module PackageDecorator
 
-      US_STATES_REQUIRING_CUSTOMS = ["AS", "GU", "MP", "PR", "VI", "UM". "AP", "AE", "AA"]
+      US_STATES_REQUIRING_CUSTOMS = ["AS", "GU", "MP", "PR", "VI", "UM", "AP", "AE", "AA"]
 
       def easypost_parcel
         ::EasyPost::Parcel.create weight: weight
