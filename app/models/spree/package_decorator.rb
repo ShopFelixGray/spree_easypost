@@ -9,7 +9,7 @@ module Spree
       end
 
       def use_easypost?
-        !order.ship_address.nil? && shipping_categories.any? { |shipping_category| shipping_category.use_easypost }
+        order.ship_address.present? && shipping_categories.any? { |shipping_category| shipping_category.use_easypost }
       end
 
       def build_sku_list
