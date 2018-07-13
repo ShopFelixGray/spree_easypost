@@ -52,6 +52,7 @@ Spree::Shipment.class_eval do
         from_address: stock_location.easypost_address,
         parcel: ep_package.easypost_parcel,
         customs_info: ep_package.easypost_customs_info,
+        reference: ep_package.ref_number,
         options: {
           print_custom_1: ep_package.ref_number,
           print_custom_1_barcode: true,

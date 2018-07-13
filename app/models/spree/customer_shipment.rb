@@ -52,6 +52,7 @@ module Spree
       ::EasyPost::Shipment.create(
         from_address: stock_location.easypost_address,
         to_address: order.ship_address.easypost_address,
+        reference: return_authorization.number,
         parcel: build_parcel,
         options: { print_custom_1: return_authorization.number, 
                    print_custom_1_barcode: true,

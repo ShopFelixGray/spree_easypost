@@ -60,6 +60,7 @@ module Spree
           from_address: stock_location.easypost_address,
           parcel: easypost_parcel,
           customs_info: easypost_customs_info,
+          reference: ref_number,
           options: {
             print_custom_1: ref_number, 
             print_custom_1_barcode: true,
