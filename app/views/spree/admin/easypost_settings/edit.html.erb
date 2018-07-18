@@ -36,6 +36,16 @@
           <label<%= t('customs_eel_pfc') %></label><br />
           <%=  text_field_tag 'settings[customs_eel_pfc]', Spree::Config.customs_eel_pfc %>
         </p>
+
+        <p>
+          <label<%= t('carrier_accounts_shipping') %></label><br />
+          <%=  text_field_tag 'settings[carrier_accounts_shipping]', Spree::Config.carrier_accounts_shipping %>
+        </p>
+
+        <p>
+          <label<%= t('carrier_accounts_returns') %></label><br />
+          <%=  text_field_tag 'settings[carrier_accounts_returns]', Spree::Config.carrier_accounts_returns %>
+        </p>
       </fieldset>
     </div>
   </div>

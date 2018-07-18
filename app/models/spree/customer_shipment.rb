@@ -48,16 +48,21 @@ module Spree
       end
     end
 
+    def carrier_accounts
+      Spree::Config[:carrier_accounts_returns].split(",")
+    end
+
     def build_easypost_shipment
       ::EasyPost::Shipment.create(
         from_address: stock_location.easypost_address,
         to_address: order.ship_address.easypost_address,
         reference: return_authorization.number,
         parcel: build_parcel,
+        carrier_accounts:carrier_accounts,
         options: { print_custom_1: return_authorization.number, 
                    print_custom_1_barcode: true,
                    print_custom_2: build_sku_list, 
-                   print_custom_2_barcode: false},
+                   print_custom_2_barcode: false },
         is_return: true
       )
     end
