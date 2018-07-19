@@ -17,7 +17,11 @@ module Spree
       end
 
       def ref_number
-        order.number
+        shipment.number
+      end
+
+      def shipment
+        contents.detect {|item| !!item.try(:inventory_unit).try(:shipment) }.try(:inventory_unit).try(:shipment)
       end
 
       def customs_required?

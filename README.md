@@ -31,6 +31,10 @@ You will need to [sign up for an account](https://www.easypost.com/) to use this
 
   If your server was running, restart it so that it can find the assets properly.
 
+6. Add Carrier Accounts
+
+  Make sure to add accounts (seperated by commas but NO spaces) to the easypost settings in the admin section configuration. The account ids can be found in your easypost dashboard under carrier section.
+
 ## Usage
 
 1. Validating An Address
