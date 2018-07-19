@@ -17,7 +17,11 @@ module Spree
       end
 
       def ref_number
-        shipment.number
+        if shipment.nil?
+          order.number
+        else
+          shipment.number
+        end
       end
 
       def shipment
