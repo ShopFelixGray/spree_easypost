@@ -12,7 +12,7 @@ Spree::Shipment.class_eval do
       if selected_easy_post_shipment_id
         @ep_shipment ||= ::EasyPost::Shipment.retrieve(selected_easy_post_shipment_id)
       else
-        @ep_shipment = build_easypost_shipment
+        @ep_shipment = to_package.easypost_shipment
       end
     end
 
@@ -45,20 +45,4 @@ Spree::Shipment.class_eval do
       self.selected_shipping_rate.easy_post_shipment_id
     end
 
-    def build_easypost_shipment
-      ep_package = to_package
-      ::EasyPost::Shipment.create(
-        to_address: order.ship_address.easypost_address,
-        from_address: stock_location.easypost_address,
-        parcel: ep_package.easypost_parcel,
-        customs_info: ep_package.easypost_customs_info,
-        reference: ep_package.ref_number,
-        options: {
-          print_custom_1: ep_package.ref_number,
-          print_custom_1_barcode: true,
-          print_custom_2: ep_package.build_sku_list,
-          print_custom_2_barcode: false 
-        },
-      )
-    end
 end

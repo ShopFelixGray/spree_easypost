@@ -25,7 +25,9 @@ module Spree
             :use_easypost_on_frontend,
             :customs_signer,
             :customs_contents_type,
-            :customs_eel_pfc
+            :customs_eel_pfc,
+            :carrier_accounts_shipping,
+            :carrier_accounts_returns,
         )
       end
     end

@@ -17,7 +17,15 @@ module Spree
       end
 
       def ref_number
-        order.number
+        if shipment.nil?
+          order.number
+        else
+          shipment.number
+        end
+      end
+
+      def shipment
+        contents.detect {|item| !!item.try(:inventory_unit).try(:shipment) }.try(:inventory_unit).try(:shipment)
       end
 
       def customs_required?
@@ -54,6 +62,10 @@ module Spree
         )
       end
 
+      def carrier_accounts
+        Spree::Config[:carrier_accounts_shipping].split(",")
+      end
+
       def easypost_shipment
         ::EasyPost::Shipment.create(
           to_address: order.ship_address.easypost_address,
@@ -61,6 +73,7 @@ module Spree
           parcel: easypost_parcel,
           customs_info: easypost_customs_info,
           reference: ref_number,
+          carrier_accounts: carrier_accounts,
           options: {
             print_custom_1: ref_number, 
             print_custom_1_barcode: true,
