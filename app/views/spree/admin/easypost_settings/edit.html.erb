@@ -23,28 +23,33 @@
         </p>
 
         <p>
-          <label<%= t('customs_signer') %></label><br />
+          <label><%= t('customs_signer') %></label><br />
           <%=  text_field_tag 'settings[customs_signer]', Spree::Config.customs_signer %>
         </p>
 
         <p>
-          <label<%= t('customs_contents_type') %></label><br />
+          <label><%= t('customs_contents_type') %></label><br />
           <%=  text_field_tag 'settings[customs_contents_type]', Spree::Config.customs_contents_type %>
         </p>
 
         <p>
-          <label<%= t('customs_eel_pfc') %></label><br />
+          <label><%= t('customs_eel_pfc') %></label><br />
           <%=  text_field_tag 'settings[customs_eel_pfc]', Spree::Config.customs_eel_pfc %>
         </p>
 
         <p>
-          <label<%= t('carrier_accounts_shipping') %></label><br />
+          <label><%= t('carrier_accounts_shipping') %></label><br />
           <%=  text_field_tag 'settings[carrier_accounts_shipping]', Spree::Config.carrier_accounts_shipping %>
         </p>
 
         <p>
-          <label<%= t('carrier_accounts_returns') %></label><br />
+          <label><%= t('carrier_accounts_returns') %></label><br />
           <%=  text_field_tag 'settings[carrier_accounts_returns]', Spree::Config.carrier_accounts_returns %>
+        </p>
+
+        <p>
+          <label><%= t('endorsement_type') %></label><br />
+          <%=  text_field_tag 'settings[endorsement_type]', Spree::Config.endorsement_type %>
         </p>
       </fieldset>
     </div>

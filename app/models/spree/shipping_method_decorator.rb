@@ -2,7 +2,7 @@ Spree::ShippingMethod.class_eval do
 
   # Some shipping methods are only meant to be set via backend
   def frontend?
-    self.display_on != "back_end" && none?
+    self.display_on != "back_end" && !none?
   end
 
   # Some shipping methods should not be displayed at all
