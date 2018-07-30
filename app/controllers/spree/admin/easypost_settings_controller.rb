@@ -28,6 +28,7 @@ module Spree
             :customs_eel_pfc,
             :carrier_accounts_shipping,
             :carrier_accounts_returns,
+            :endorsement_type,
         )
       end
     end

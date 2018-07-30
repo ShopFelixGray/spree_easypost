@@ -78,7 +78,8 @@ module Spree
             print_custom_1: ref_number, 
             print_custom_1_barcode: true,
             print_custom_2: build_sku_list, 
-            print_custom_2_barcode: false
+            print_custom_2_barcode: false,
+            endorsement: Spree::Config[:endorsement_type]
           },
         )
       end

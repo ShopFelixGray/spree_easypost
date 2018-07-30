@@ -19,6 +19,7 @@ module SpreeEasypost
        preference :customs_eel_pfc, :string, default: 'NOEEI 30.37(a)'
        preference :carrier_accounts_shipping, :string, default: ''
        preference :carrier_accounts_returns, :string, default: ''
+       preference :endorsement_type, :string, default: 'RETURN_SERVICE_REQUESTED'
      end
 
      Spree::ShippingMethod::DISPLAY += [:none]
