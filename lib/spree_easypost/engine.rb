@@ -20,6 +20,8 @@ module SpreeEasypost
        preference :carrier_accounts_shipping, :string, default: ''
        preference :carrier_accounts_returns, :string, default: ''
      end
+
+     Spree::ShippingMethod::DISPLAY += [:none]
    end
 
     def self.activate
