@@ -1,6 +1,10 @@
 module Spree
   module EasyPost
     module AddressDecorator
+      def self.prepended(base)
+        base.validate :state_validate, :postal_code_validate, if: :use_spree_validations?
+      end
+
       def easypost_address
         attributes = {
           verify: ["zip4", "delivery"],
@@ -33,6 +37,11 @@ module Spree
       end
 
       private
+
+      def use_spree_validations?
+        # if Spree::Config.validate_address_with_easypost is set to true then we do not want to run Spree's built-in validations
+        !Spree::Config.validate_address_with_easypost
+      end
 
       def success?(verification)
         no_errors = !contains_errors_despite_success?(verification.errors)
