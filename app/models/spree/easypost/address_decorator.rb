@@ -39,7 +39,7 @@ module Spree
       private
 
       # if Spree::Config.validate_address_with_easypost is set to true
-      #then we do not want to run Spree's built-in validations
+      # then we do not wan t to run Spree's built-in validations
       def use_spree_validations?
         !Spree::Config.validate_address_with_easypost
       end
