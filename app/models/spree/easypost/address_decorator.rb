@@ -1,7 +1,10 @@
 module Spree
   module EasyPost
     module AddressDecorator
+      # StockLocation AND Address prepend this decorator,
+      # but state_validate and postal_code_validate are only methods on Address Model
       def self.prepended(base)
+        return unless base == Spree::Address
         base.validate :state_validate, :postal_code_validate, if: :use_spree_validations?
       end
 
