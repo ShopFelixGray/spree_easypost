@@ -51,6 +51,11 @@
           <label><%= t('endorsement_type') %></label><br />
           <%=  text_field_tag 'settings[endorsement_type]', Spree::Config.endorsement_type %>
         </p>
+
+        <p>
+          <label><%= t('returns_center_stock_location') %></label><br />
+          <%=  select_tag 'settings[returns_stock_location_id]', options_from_collection_for_select(@stock_locations, "id", "admin_name", Spree::Config.returns_stock_location_id) %>
+        </p>
       </fieldset>
     </div>
   </div>

@@ -1,6 +1,8 @@
 module Spree
   module Admin
     class EasypostSettingsController < Spree::Admin::BaseController
+      before_action :load_stock_locations, only: [:edit, :update]
+
       def edit
       end
 
@@ -11,6 +13,10 @@ module Spree
       end
 
       private
+
+      def load_stock_locations
+        @stock_locations = Spree::StockLocation.all
+      end
 
       def update_easypost_settings
         easypost_settings_params.each do |key, value|
@@ -29,6 +35,7 @@ module Spree
             :carrier_accounts_shipping,
             :carrier_accounts_returns,
             :endorsement_type,
+            :returns_stock_location_id,
         )
       end
     end
