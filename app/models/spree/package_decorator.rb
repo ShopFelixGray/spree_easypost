@@ -34,6 +34,10 @@ module Spree
        (US_STATES_REQUIRING_CUSTOMS.any? { |i| i[shipping_address.state.abbr] })
       end
 
+      def stock_location_returns
+        Spree::StockLocation.find_by(id: Spree::Config[:returns_stock_location_id])
+      end
+
       def easypost_customs_info
         return if !customs_required?
  
@@ -68,8 +72,9 @@ module Spree
 
       def easypost_shipment
         ::EasyPost::Shipment.create(
-          to_address: order.ship_address.easypost_address,
-          from_address: stock_location.easypost_address,
+          to_address: order.ship_address.try(:easypost_address),
+          from_address: stock_location.try(:easypost_address),
+          return_address: stock_location_returns.try(:easypost_address),
           parcel: easypost_parcel,
           customs_info: easypost_customs_info,
           reference: ref_number,

@@ -20,6 +20,7 @@ module SpreeEasypost
        preference :carrier_accounts_shipping, :string, default: ''
        preference :carrier_accounts_returns, :string, default: ''
        preference :endorsement_type, :string, default: 'RETURN_SERVICE_REQUESTED'
+       preference :returns_stock_location_id, :integer, default: 0
      end
 
      Spree::ShippingMethod::DISPLAY += [:none]
