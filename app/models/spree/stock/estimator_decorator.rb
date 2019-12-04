@@ -10,9 +10,9 @@ module Spree
         if use_easypost_to_calculate_rate?(package, shipping_method_filter)
           shipment = package.easypost_shipment
           rates = shipment.rates.sort_by { |r| r.rate.to_i }
-    
+
           shipping_rates = []
-    
+
           if rates.any?
             rates.each do |rate|
               # See if we can find the shipping method otherwise create it
@@ -29,12 +29,12 @@ module Spree
               # Save the rates that we want to show the customer
               shipping_rates << spree_rate if shipping_method.available_to_display(shipping_method_filter)
             end
-    
+
             # Sets cheapest rate to be selected by default
             if shipping_rates.any?
               shipping_rates.min_by(&:cost).selected = true
             end
-    
+
             shipping_rates
           else
             []
@@ -45,21 +45,21 @@ module Spree
           sort_shipping_rates(rates)
         end
       end
-  
+
       private
 
       def use_easypost_to_calculate_rate?(package, shipping_method_filter)
-        package.use_easypost? &&
-        (ShippingMethod::DISPLAY_ON_BACK_END == shipping_method_filter || 
+        package.use_easypost? && package.weight != 0 &&
+        (ShippingMethod::DISPLAY_ON_BACK_END == shipping_method_filter ||
         ShippingMethod::DISPLAY_ON_FRONT_AND_BACK_END == shipping_method_filter ||
         is_shipping_rate_dynamic_on_front_end?(shipping_method_filter))
       end
 
       def is_shipping_rate_dynamic_on_front_end?(shipping_method_filter)
-        Spree::Config[:use_easypost_on_frontend] && 
+        Spree::Config[:use_easypost_on_frontend] &&
         (ShippingMethod::DISPLAY_ON_FRONT_END == shipping_method_filter)
       end
-  
+
       # Cartons require shipping methods to be present, This will lookup a
       # Shipping method based on the admin(internal)_name. This is not user facing
       # and should not be changed in the admin.
