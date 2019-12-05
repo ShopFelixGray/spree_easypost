@@ -40,11 +40,11 @@ module Spree
 
       def easypost_customs_info
         return if !customs_required?
- 
+
         customs_items = contents.map do |item|
           variant = item.variant
           product = variant.product
-          
+
           ::EasyPost::CustomsItem.create(
             description: product.taxons.map { |taxon| taxon.name }.join(" "),
             quantity: item.quantity,
@@ -70,6 +70,16 @@ module Spree
         Spree::Config[:carrier_accounts_shipping].split(",")
       end
 
+      def shipment_options
+        {
+          print_custom_1: ref_number,
+          print_custom_1_barcode: true,
+          print_custom_2: build_sku_list,
+          print_custom_2_barcode: false,
+          endorsement: Spree::Config[:endorsement_type]
+        }
+      end
+
       def easypost_shipment
         ::EasyPost::Shipment.create(
           to_address: order.ship_address.try(:easypost_address),
@@ -79,13 +89,7 @@ module Spree
           customs_info: easypost_customs_info,
           reference: ref_number,
           carrier_accounts: carrier_accounts,
-          options: {
-            print_custom_1: ref_number, 
-            print_custom_1_barcode: true,
-            print_custom_2: build_sku_list, 
-            print_custom_2_barcode: false,
-            endorsement: Spree::Config[:endorsement_type]
-          },
+          options: shipment_options
         )
       end
     end
