@@ -8,15 +8,14 @@ module Spree
         base.validate :state_validate, :postal_code_validate, if: :use_spree_validations?
       end
 
-      def easypost_address
+      def easypost_address(attributes = {})
         attributes = {
-          verify: ["zip4", "delivery"],
           street1: address1,
           street2: address2,
           city: city,
           zip: zipcode,
           phone: phone
-        }
+        }.merge(attributes)
 
         attributes[:company] = company if respond_to?(:company)
         attributes[:name] = full_name if respond_to?(:full_name)
@@ -29,7 +28,7 @@ module Spree
       def easypost_address_validate
         return true if !Spree::Config.validate_address_with_easypost
 
-        ep_address = easypost_address
+        ep_address = easypost_address({verify: ["zip4", "delivery"]})
         verifications = ep_address.verifications
 
         unless success?(verifications.delivery) && success?(verifications.zip4)
