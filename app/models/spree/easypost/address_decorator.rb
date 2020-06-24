@@ -26,15 +26,15 @@ module Spree
       end
 
       def easypost_address_validate
-        return true if !Spree::Config.validate_address_with_easypost
+        return true unless Spree::Config.validate_address_with_easypost
 
-        ep_address = easypost_address({verify: ["zip4", "delivery"]})
+        ep_address = easypost_address({ verify: ["zip4", "delivery"] })
         verifications = ep_address.verifications
 
-        unless success?(verifications.delivery) && success?(verifications.zip4)
-          return { errors: get_errors(verifications) }
-        else
+        if success?(verifications.delivery) && success?(verifications.zip4)
           return { suggestions: address_suggestions(ep_address) }
+        else
+          return { errors: get_errors(verifications) }
         end
       end
 
@@ -111,7 +111,6 @@ module Spree
           "E.ADDRESS.NOT_FOUND" =>             :address
         }
       end
-
     end
   end
 end
