@@ -21,7 +21,7 @@ Spree::Shipment.class_eval do
       raise "can only buy postage when order is ready" unless (self.state == 'ready' || self.state == 'shipped')
 
       # regenerate the rates so we get updated data
-      refresh_rates(Spree::ShippingMethod::DISPLAY_ON_FRONT_AND_BACK_END)
+      refresh_rates(Spree::ShippingMethod::DISPLAY_ON_BACK_END)
       @ep_shipment = nil
 
       # Get the selected rate

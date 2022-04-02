@@ -12,7 +12,6 @@ Spree::ShippingMethod.class_eval do
 
   # Only should shipping methods that need to be displayed
   def available_to_display(display_filter)
-    (!none? && display_filter == Spree::ShippingMethod::DISPLAY_ON_FRONT_AND_BACK_END) ||
     (frontend? && display_filter == Spree::ShippingMethod::DISPLAY_ON_FRONT_END) ||
     (!frontend? && display_filter == Spree::ShippingMethod::DISPLAY_ON_BACK_END)
   end
